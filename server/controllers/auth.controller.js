@@ -23,12 +23,12 @@ exports.login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return next(new AppError('no email or password', 400));
+        return next(new AppError('! no email or password', 400));
     }
 
     const user = await User.findOne({ email }).select('+password');
     if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('email or password is wrong', 401));
+        return next(new AppError('! email or password is wrong', 401));
     }
 
     createSendToken(user, 200, req, res);
