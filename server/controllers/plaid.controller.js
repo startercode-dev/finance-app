@@ -24,6 +24,8 @@ const client = new PlaidApi(configuration);
 let webhookUrl =
     process.env.WEBHOOK_URL || 'https://www.example.com/server/plaid_webhook';
 
+// console.log(webhookUrl);
+
 exports.fireWebhook = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
     const accessTokens = items[0].accessToken;
@@ -33,13 +35,27 @@ exports.fireWebhook = async (req, res, next) => {
     try {
         const fireWebhookRes = await client.sandboxItemFireWebhook({
             access_token: accessTokens,
-            // webhook_type: WebhookType.Item,
             webhook_code: 'DEFAULT_UPDATE',
         });
         console.log(fireWebhookRes.data);
         res.status(200).json(fireWebhookRes.data);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
-        // res.json(fireWebhookRes);
+exports.updateWebhook = async (req, res, next) => {
+    const items = await Item.find({ user: req.user._id });
+    const accessTokens = items[0].accessToken;
+    const url = req.body.newUrl;
+
+    try {
+        const updateWebhookRes = await client.itemWebhookUpdate({
+            access_token: accessTokens,
+            webhook: url,
+        });
+
+        res.status(200).json(updateWebhookRes.data);
     } catch (error) {
         console.log(error);
     }

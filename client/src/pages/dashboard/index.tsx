@@ -51,16 +51,6 @@ export default function Dashboard() {
   const sums = sumCategories.map((i) => i.totalAmount);
   // console.log(sums);
 
-  const fireWebhook = async function () {
-    try {
-      await fetch('/api/fire-webhook', {
-        method: 'POST',
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     const init = async () => {
       try {
@@ -198,11 +188,7 @@ export default function Dashboard() {
 
           {/* //* STOCK */}
           <div className="grid grid-cols-3 mr-12 mb-12 gap-x-12">
-            <div className="card">
-              <button className="border border-dark p-1" onClick={fireWebhook}>
-                fire webhook
-              </button>
-            </div>
+            <div className="card"></div>
             <div className="card"></div>
             <div className="card"></div>
           </div>

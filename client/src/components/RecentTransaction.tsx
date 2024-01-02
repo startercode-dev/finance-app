@@ -18,10 +18,10 @@ export default function RecentTransaction() {
     );
   });
 
-  const last15Days = new Date(currentDate.setDate(currentDate.getDate() - 15));
+  const last15Days = new Date();
+  last15Days.setDate(last15Days.getDate() - 15);
   const last15DaysTransactions = user.transactions.filter((t) => {
     const transactionDate = new Date(t.date);
-
     return transactionDate >= last15Days;
   });
   // console.log(last15DaysTransactions);
@@ -43,9 +43,15 @@ export default function RecentTransaction() {
     return currentDate;
   };
 
+  const getStartDate24m = function () {
+    const monthsAgo = currentDate.getMonth() - 24;
+    currentDate.setMonth(monthsAgo);
+    return currentDate;
+  };
+
   const getTransactions1m = async () => {
     const startDate = formatDate(getStartDate1m());
-    // console.log(startDate, endDate);
+    console.log(startDate, endDate);
 
     const body = {
       endDate,
@@ -64,12 +70,6 @@ export default function RecentTransaction() {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const getStartDate24m = function () {
-    const monthsAgo = currentDate.getMonth() - 24;
-    currentDate.setMonth(monthsAgo);
-    return currentDate;
   };
 
   const getTransactions24m = async () => {

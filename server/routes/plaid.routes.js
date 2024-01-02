@@ -12,5 +12,6 @@ router.get('/accounts/get', plaidController.getAccounts);
 router.post('/transactions/get', plaidController.getTransactions);
 
 router.post('/fire_webhook', plaidController.fireWebhook);
+router.post('/update_webhook', plaidController.updateWebhook);
 
 module.exports = router;
