@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import TransactionItem from './TransactionItem';
 import { getTransactionsData } from '@/store/userActions';
-import { useEffect } from 'react';
 import { ArrowsClockwise } from '@phosphor-icons/react';
 
 export default function RecentTransaction() {

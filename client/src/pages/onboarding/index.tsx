@@ -82,7 +82,7 @@ export default function UserOnboarding() {
       <button
         onClick={() => open()}
         disabled={!ready}
-        className="my-5 text-lg bg-primary text-white px-7 py-2 border border-primary hover:bg-white hover:text-primary disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-600 transition-all rounded-lg"
+        className="my-5 text-lg bg-primary text-white px-7 py-2 border border-primary hover:bg-white hover:text-primary disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-600 transition-all rounded-sm"
       >
         Connect a bank account
       </button>

@@ -17,8 +17,7 @@ export default function MonthlySpending() {
   const totalSpending = filtered
     .reduce((acc, transaction) => acc + transaction.amount, 0)
     .toFixed(2);
-
-  console.log(totalSpending);
+  // console.log(totalSpending);
 
   return (
     <div className="card mx-12 mb-12 flex flex-col justify-center items-center gap-3">

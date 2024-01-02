@@ -8,9 +8,45 @@ import { useEffect } from 'react';
 import RecentTransaction from '@/components/RecentTransaction';
 import MonthlySpending from '@/components/MonthlySpending';
 import Nav from '@/components/Nav';
+import 'chart.js/auto';
+import { Doughnut } from 'react-chartjs-2';
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  const filteredMonth = user.transactions.filter((t) => {
+    const transactionDate = new Date(t.date);
+    return (
+      transactionDate.getMonth() === currentMonth &&
+      transactionDate.getFullYear() === currentYear
+    );
+  });
+
+  const transactionsByCategory = filteredMonth.reduce((acc, transaction) => {
+    const { activeCategory, amount } = transaction;
+    if (!acc[activeCategory]) {
+      acc[activeCategory] = [];
+    }
+    acc[activeCategory].push(amount);
+    return acc;
+  }, {});
+
+  const sumCategories = Object.keys(transactionsByCategory).map((category) => {
+    const amounts = transactionsByCategory[category];
+    const totalAmount = amounts.reduce((acc, amount) => acc + amount, 0);
+    return { category, totalAmount };
+  });
+  console.log(sumCategories);
+
+  const categories = sumCategories.map((i) => i.category);
+  // console.log(categories);
+
+  const sums = sumCategories.map((i) => i.totalAmount);
+  // console.log(sums);
 
   useEffect(() => {
     const init = async () => {
@@ -33,7 +69,38 @@ export default function Dashboard() {
       <div className="w-full h-[calc(100vh-144px)] grid grid-cols-38/61">
         <div className="grid grid-rows-col1 h-[inhert]">
           <MonthlySpending />
-          <div className="card mx-12 mb-12"></div>
+          <div className="card mx-12 mb-12 flex justify-center">
+            <Doughnut
+              data={{
+                labels: categories,
+                datasets: [
+                  {
+                    label: 'Monthly Categories',
+                    data: sums,
+                    backgroundColor: [
+                      '#AACA94',
+                      '#F4907A',
+                      '#5B867A',
+                      '#EDD698',
+                      '#D295A1',
+                      '#855E95',
+                    ],
+                    hoverOffset: 4,
+                  },
+                ],
+              }}
+              options={{
+                responsive: true,
+                aspectRatio: 5 / 4,
+                maintainAspectRatio: true,
+                plugins: {
+                  legend: {
+                    position: 'right',
+                  },
+                },
+              }}
+            />
+          </div>
           <div className="card mx-12 mb-12"></div>
         </div>
 
