@@ -11,4 +11,6 @@ router.post('/item/get_access_token', plaidController.getAccessToken);
 router.get('/accounts/get', plaidController.getAccounts);
 router.post('/transactions/get', plaidController.getTransactions);
 
+router.post('/fire_webhook', plaidController.fireWebhook);
+
 module.exports = router;

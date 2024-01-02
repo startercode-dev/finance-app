@@ -6,8 +6,9 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 });
 
-dotenv.config({ path: './.env.dev' });
+dotenv.config({ path: './.env.local' });
 const app = require('./app');
+const webhookApp = require('./webhookApp');
 
 const DB = process.env.DATABASE_LOCAL;
 // const DB = process.env.DATABASE.replace(
@@ -33,6 +34,11 @@ const server = connectDB().then(() => {
     app.listen(port, () => {
         console.log(`Running at port ${port} ...`);
     });
+});
+
+const webhookPort = process.env.WEBHOOK_PORT;
+webhookApp.listen(webhookPort, () => {
+    console.log(`webhook server is running at port ${webhookPort}`);
 });
 
 process.on('unhandledRejection', (err) => {

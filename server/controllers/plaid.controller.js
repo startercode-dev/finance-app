@@ -1,7 +1,13 @@
 const Item = require('../models/item.model');
 const Account = require('../models/account.model');
 const Transaction = require('../models/transaction.model');
-const { PlaidApi, Configuration, PlaidEnvironments } = require('plaid');
+const {
+    PlaidApi,
+    Configuration,
+    PlaidEnvironments,
+    WebhookType,
+    SandboxItemFireWebhookRequestWebhookCodeEnum,
+} = require('plaid');
 
 const configuration = new Configuration({
     basePath: PlaidEnvironments[process.env.PLAID_ENV],
@@ -15,6 +21,30 @@ const configuration = new Configuration({
 });
 const client = new PlaidApi(configuration);
 
+let webhookUrl =
+    process.env.WEBHOOK_URL || 'https://www.example.com/server/plaid_webhook';
+
+exports.fireWebhook = async (req, res, next) => {
+    const items = await Item.find({ user: req.user._id });
+    const accessTokens = items[0].accessToken;
+
+    // console.log(accessTokens);
+
+    try {
+        const fireWebhookRes = await client.sandboxItemFireWebhook({
+            access_token: accessTokens,
+            // webhook_type: WebhookType.Item,
+            webhook_code: 'DEFAULT_UPDATE',
+        });
+        console.log(fireWebhookRes.data);
+        res.status(200).json(fireWebhookRes.data);
+
+        // res.json(fireWebhookRes);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 //* GET PLAID LINK TOKEN
 exports.getLinkToken = async (req, res, next) => {
     const clientUserId = req.user.id;
@@ -26,13 +56,13 @@ exports.getLinkToken = async (req, res, next) => {
         client_name: 'Macro',
         products: ['transactions'],
         language: 'en',
-        redirect_uri: 'http://localhost:8000/',
         country_codes: ['US'],
+        webhook: webhookUrl,
     };
 
     try {
         const createTokenResponse = await client.linkTokenCreate(request);
-        // console.log(createTokenResponse.data);
+        // console.log(createTokenResponse);
         res.status(200).json(createTokenResponse.data);
 
         //note: Adjust the catchAsync error handling for plaid APIs
@@ -76,7 +106,7 @@ exports.getAccounts = async (req, res, next) => {
         .sort({ createdAt: -1 }) // Sort by createdAt field in descending order (newest first)
         .limit(1);
     const accessTokens = items[0].accessToken;
-    console.log(items);
+    // console.log(items);
 
     const currAccounts = await Account.find({ user: req.user._id });
     const existingAccounts = currAccounts.map((t) => t.accountId);

@@ -4,7 +4,8 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "dev": "nodemon server.js"
+        "dev": "nodemon server.js",
+        "webhook": "ngrok http 6969"
     },
     "keywords": [],
     "author": "",

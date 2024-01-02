@@ -18,6 +18,14 @@ export default function RecentTransaction() {
     );
   });
 
+  const last15Days = new Date(currentDate.setDate(currentDate.getDate() - 15));
+  const last15DaysTransactions = user.transactions.filter((t) => {
+    const transactionDate = new Date(t.date);
+
+    return transactionDate >= last15Days;
+  });
+  // console.log(last15DaysTransactions);
+
   const formatDate = function (date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -113,7 +121,7 @@ export default function RecentTransaction() {
 
       <ul className="overflow-y-auto">
         {user.transactions && user.transactions.length > 0 ? (
-          filtered.map((transaction) => {
+          last15DaysTransactions.map((transaction) => {
             return (
               <TransactionItem
                 key={transaction.transactionId}
