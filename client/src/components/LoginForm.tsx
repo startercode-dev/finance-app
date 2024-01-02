@@ -2,11 +2,14 @@ import useInput from '@/hooks/useInput';
 import styles from './Form.module.css';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { userActions } from '@/store/userSlice';
 
 export default function LoginForm() {
     const router = useRouter();
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     const [serverErrorMessage, setServerErrorMessage] = useState('');
+    const dispatch = useDispatch();
 
     const {
         value: email,
@@ -29,22 +32,29 @@ export default function LoginForm() {
 
         setServerErrorMessage('');
         if (emailIsValid && passwordIsValid) {
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
-            });
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email,
+                        password,
+                    }),
+                });
 
-            const data = await res.json();
+                const { data } = await res.json();
+                const user = data.user;
+                // console.log(user);
+                dispatch(userActions.setUser(user));
 
-            if (data.status === 'failed') {
-                setServerErrorMessage(data.msg);
-                return;
+                if (data.status === 'failed') {
+                    setServerErrorMessage(data.msg);
+                    return;
+                }
+
+                router.push('/dashboard');
+            } catch (err) {
+                setServerErrorMessage('error');
             }
-
-            router.push('/dashboard');
         }
     };
 

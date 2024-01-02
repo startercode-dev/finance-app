@@ -9,12 +9,10 @@ export default async function middleware(req: NextRequest) {
     if (req.nextUrl.pathname.startsWith('/dashboard')) {
         if (token) {
             try {
-                const verified = await jwtVerify(
+                await jwtVerify(
                     token,
-                    new TextEncoder().encode(secret)
+                    new TextEncoder().encode(process.env.JWT_SECRET)
                 );
-
-                console.log(verified.payload);
 
                 return NextResponse.next();
             } catch (err) {

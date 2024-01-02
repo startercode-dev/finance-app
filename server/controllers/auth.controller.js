@@ -119,9 +119,7 @@ const createSendToken = (user, statusCode, req, res) => {
     res.status(statusCode).json({
         status: 'success',
         token,
-        data: {
-            user,
-        },
+        user,
     });
 };
 
@@ -161,7 +159,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     }
 
     req.user = currUser;
-    res.locals.user = currUser;
+    // res.locals.user = currUser;
     next();
 });
 

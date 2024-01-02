@@ -21,6 +21,7 @@ export default async function handler(
             );
 
             const data = await response.json();
+            // console.log(data);
 
             if (data.status === 'failed') {
                 throw data;
@@ -41,7 +42,7 @@ export default async function handler(
             );
 
             res.status(201).json({
-                message: 'success',
+                data,
             });
         } catch (err) {
             res.status(500).json(err);
