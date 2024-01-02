@@ -6,15 +6,20 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 });
 
-dotenv.config({ path: './.env.local' });
 const app = require('./app');
 const webhookApp = require('./webhookApp');
 
-const DB = process.env.DATABASE_LOCAL;
-// const DB = process.env.DATABASE.replace(
-//     '<password>',
-//     process.env.DATABASE_PASSWORD
-// );
+let DB;
+if (process.env.NODE_ENV) {
+    dotenv.config({ path: `./.env.${process.env.NODE_ENV}` });
+    DB = process.env.DATABASE.replace(
+        '<password>',
+        process.env.DATABASE_PASSWORD,
+    );
+} else {
+    dotenv.config({ path: `./.env.local` });
+    DB = process.env.DATABASE_LOCAL;
+}
 
 mongoose.set('strictQuery', true);
 const connectDB = async () => {
