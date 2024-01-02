@@ -1,5 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { userActions } from '@/store/userSlice';
+import { authenticate } from '@/utils/authenticate';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
@@ -12,16 +14,6 @@ export default function UserOnboarding() {
     const getAccounts = async () => {
         try {
             await fetch('/api/get-accounts', {
-                method: 'GET',
-            });
-            console.log('success');
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const getTransactions = async () => {
-        try {
-            await fetch('/api/get-transactions', {
                 method: 'GET',
             });
             console.log('success');

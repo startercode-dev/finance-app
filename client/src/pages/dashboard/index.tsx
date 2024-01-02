@@ -32,7 +32,11 @@ export default function Dashboard() {
             await fetch('/api/get-transactions', {
                 method: 'GET',
             });
-            console.log('success');
+
+            dispatch(getTransactionsData());
+
+            // console.log('success');
+            //! continue implementing user flow
         } catch (error) {
             console.log(error);
         }
@@ -94,7 +98,22 @@ export default function Dashboard() {
                 <div className={styles.content}>
                     <div className={styles.column1}>
                         <div className={styles.overview}></div>
-                        <div className={styles.accounts}></div>
+                        <div className={styles.accounts}>
+                            <ul className={styles.container}>
+                                {user.accounts ? (
+                                    user.accounts.map((account) => {
+                                        return (
+                                            <>
+                                                <p>{account.accountName}</p>
+                                                <p>{account.currentBalance}</p>
+                                            </>
+                                        );
+                                    })
+                                ) : (
+                                    <p>no data</p>
+                                )}
+                            </ul>
+                        </div>
                     </div>
                     <div className={styles.column2}>
                         <div className={styles.budget}>
@@ -121,7 +140,6 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-                )
             </main>
         </>
     );

@@ -47,10 +47,6 @@ const userSlice = createSlice({
             state.name = action.payload;
         },
 
-        // setNewUser: (state, action) => {
-        //     state.newUser = action.payload;
-        // },
-
         setPlaidLinkToken: (state, action) => {
             state.plaidLinkToken = action.payload;
         },
