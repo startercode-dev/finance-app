@@ -2,9 +2,14 @@ import styles from '@/styles/Dashboard.module.scss';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { getUserData } from '@/store/userActions';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { MuseoModerno } from 'next/font/google';
+import { userActions } from '@/store/userSlice';
+import { usePlaidLink } from 'react-plaid-link';
 
-export default function MainDashboard() {
+const Logo = MuseoModerno({ subsets: ['latin'] });
+
+export default function Dashboard() {
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.user);
     const router = useRouter();
@@ -14,10 +19,45 @@ export default function MainDashboard() {
         router.push('/');
     };
 
+    const generateToken = useCallback(async () => {
+        const response = await fetch('/api/create-link-token', {
+            method: 'POST',
+        });
+
+        const data = await response.json();
+        // console.log(data);
+        dispatch(userActions.setPlaidLinkToken(data.link_token));
+    }, []);
+
+    const onSuccess = useCallback((public_token: string) => {
+        const exchangePublicTokenForAccessToken = async () => {
+            const response = await fetch('/api/get-access-token', {
+                method: 'POST',
+                body: JSON.stringify({ public_token }),
+            });
+
+            const data = await response.json();
+            console.log(data);
+        };
+
+        exchangePublicTokenForAccessToken();
+    }, []);
+
+    const { open, ready } = usePlaidLink({
+        token: user.plaidLinkToken,
+        onSuccess,
+    });
+
     useEffect(() => {
-        if (user.isAuth === false) {
-            dispatch(getUserData());
-        }
+        const init = async () => {
+            if (user.isAuth === false) {
+                await dispatch(getUserData());
+                generateToken();
+            }
+        };
+
+        init();
+        return () => {};
     }, []);
 
     return (
@@ -25,7 +65,9 @@ export default function MainDashboard() {
             <main>
                 <nav className={`flex ${styles.nav}`}>
                     <div className={`flex ${styles.container}`}>
-                        <div>macro</div>
+                        <div className={`${Logo.className} ${styles.logo}`}>
+                            MACRO
+                        </div>
                         <ul className={`flex ${styles.links}`}>
                             <li>
                                 <img src="/accounts.svg" alt="" />
@@ -49,13 +91,13 @@ export default function MainDashboard() {
                             </li>
                         </ul>
                         <div>
-                            {user.isAuth ? (
-                                <button type="button" onClick={handleLogout}>
-                                    Logout
-                                </button>
+                            <button type="button" onClick={handleLogout}>
+                                Logout
+                            </button>
+                            {/* {user.isAuth ? (
                             ) : (
                                 'not auth'
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </nav>
@@ -65,7 +107,11 @@ export default function MainDashboard() {
                         <div className={styles.accounts}></div>
                     </div>
                     <div className={styles.column2}>
-                        <div className={styles.budget}></div>
+                        <div className={styles.budget}>
+                            <button onClick={() => open()} disabled={!ready}>
+                                Connect a bank account
+                            </button>
+                        </div>
                         <div className={styles.transactions}>
                             <h3>Activities</h3>
                             <div className={styles.container}>

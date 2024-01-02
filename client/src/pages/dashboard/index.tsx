@@ -1,5 +1,5 @@
-import MainDashboard from '@/components/MainDashboard';
+import Dashboard from '@/components/Dashboard';
 
-export default function Dashboard() {
-    return <MainDashboard />;
+export default function MainDashboard() {
+    return <Dashboard />;
 }

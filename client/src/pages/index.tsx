@@ -23,8 +23,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         const token = req.cookies.auth;
 
         if (token) {
-            const yoo = await authenticate(token);
-            console.log(yoo);
+            const authed = await authenticate(token);
+            // console.log(authed);
 
             return {
                 redirect: {
