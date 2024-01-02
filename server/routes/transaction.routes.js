@@ -5,6 +5,6 @@ const transactionController = require('../controllers/transaction.controller');
 const router = express.Router();
 
 router.use(authController.protect);
-router.get('/get', transactionController.getTransactions);
+router.get('/get-all', transactionController.getAll);
 
 module.exports = router;

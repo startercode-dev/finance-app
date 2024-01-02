@@ -1,19 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function createLinkToken(
+export default async function fetchTransaction(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method === 'POST') {
+    if (req.method === 'GET') {
         if (req.cookies.auth) {
             const token = req.cookies.auth;
 
             try {
                 const response = await fetch(
-                    `http://localhost:8000/api/v1/plaid/item/create_link_token`,
+                    `http://localhost:8000/api/v1/transaction/get-all`,
                     {
                         method: req.method,
                         headers: {
+                            'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
                     }
@@ -24,6 +25,7 @@ export default async function createLinkToken(
                 if (data.status === 'error') {
                     throw 'invalid token';
                 }
+                // console.log(data);
 
                 res.status(200).json(data);
             } catch (err) {
@@ -31,10 +33,9 @@ export default async function createLinkToken(
                 res.status(500).json(err);
             }
         }
+    } else {
+        res.status(400).json({
+            error: 'invalid request',
+        });
     }
-    // else {
-    //     res.status(400).json({
-    //         error: 'invalid request',
-    //     });
-    // }
 }

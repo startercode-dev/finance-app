@@ -1,12 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface User {
-    isAuth: boolean;
-    plaidLinkToken: string;
+    name: string;
+    newUser: boolean;
+    transactions: Array<Transaction>;
+    plaidLinkToken: String;
+}
+
+interface Transaction {
+    date: String;
+    amount: Number;
 }
 
 const initialState: User = {
-    isAuth: false,
+    name: '',
+    newUser: true,
+    transactions: [],
     plaidLinkToken: '',
 };
 
@@ -14,8 +23,8 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setAuth: (state, action) => {
-            state.isAuth = action.payload;
+        setUser: (state, action) => {
+            state.name = action.payload;
         },
 
         setPlaidLinkToken: (state, action) => {

@@ -6,9 +6,9 @@ export default async function getUser(
     res: NextApiResponse
 ) {
     if (req.method === 'GET') {
-        // console.log(req.headers.cookie);
-        if (req.headers.cookie) {
-            const token = req.headers.cookie.split('=')[1];
+        // console.log(req.cookies.auth);
+        if (req.cookies.auth) {
+            const token = req.cookies.auth;
 
             try {
                 const response = await fetch(

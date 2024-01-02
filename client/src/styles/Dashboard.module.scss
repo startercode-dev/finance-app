@@ -51,10 +51,12 @@
     .column1 {
         display: grid;
         grid-template-rows: 55.2% 44.8%;
+        height: inherit;
     }
     .column2 {
         display: grid;
         grid-template-rows: 27.6% 72.4%;
+        height: inherit;
     }
 
     .column1 > div,

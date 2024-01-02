@@ -2,7 +2,7 @@ import styles from '@/styles/Dashboard.module.scss';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { getUserData } from '@/store/userActions';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MuseoModerno } from 'next/font/google';
 import { userActions } from '@/store/userSlice';
 import { usePlaidLink } from 'react-plaid-link';
@@ -13,6 +13,8 @@ export default function Dashboard() {
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.user);
     const router = useRouter();
+    const [transactionsData, setTransactionsData] = useState([]);
+    //! move this to redux
 
     const handleLogout = async () => {
         await fetch('/api/logout');
@@ -49,16 +51,36 @@ export default function Dashboard() {
     });
 
     const getTransactions = async () => {
-        const response = await fetch('/api/get-transactions', {});
+        try {
+            await fetch('/api/get-transactions', {
+                method: 'GET',
+            });
+            console.log('success');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchTransactions = async () => {
+        try {
+            const res = await fetch('/api/fetch-transactions', {
+                method: 'GET',
+            });
+            const data = await res.json();
+            const transactions = data.transactions;
+            setTransactionsData(transactions);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
         const init = async () => {
-            if (user.isAuth === false) {
+            if (user.name === '') {
                 await dispatch(getUserData());
+                generateToken();
             }
-            getTransactions();
-            generateToken();
+            fetchTransactions();
         };
 
         init();
@@ -96,13 +118,10 @@ export default function Dashboard() {
                             </li>
                         </ul>
                         <div>
+                            {user.name ? user.name : 'not auth'}
                             <button type="button" onClick={handleLogout}>
                                 Logout
                             </button>
-                            {/* {user.isAuth ? (
-                            ) : (
-                                'not auth'
-                            )} */}
                         </div>
                     </div>
                 </nav>
@@ -116,89 +135,52 @@ export default function Dashboard() {
                             <button onClick={() => open()} disabled={!ready}>
                                 Connect a bank account
                             </button>
+                            <button onClick={getTransactions}>
+                                get transactions
+                            </button>
                         </div>
                         <div className={styles.transactions}>
                             <h3>Activities</h3>
                             <div className={styles.container}>
-                                <div className={`flex ${styles.transaction}`}>
-                                    <p>01/07/23</p>
-                                    <div className={`flex ${styles.info}`}>
-                                        <div className={styles.col2}>
-                                            <p>NORTHSTAR@TAHOE LIFT TCKT</p>
-                                            <p className={styles.account}>
-                                                Chase 1.5% Unlimited
-                                            </p>
+                                {transactionsData ? (
+                                    transactionsData.map((transaction) => (
+                                        <div
+                                            className={`flex ${styles.transaction}`}
+                                        >
+                                            <p>{transaction.authorizedDate}</p>
+                                            <div
+                                                className={`flex ${styles.info}`}
+                                            >
+                                                <div className={styles.col2}>
+                                                    <p>
+                                                        {
+                                                            transaction.transactionName
+                                                        }
+                                                    </p>
+                                                    <p
+                                                        className={
+                                                            styles.account
+                                                        }
+                                                    >
+                                                        {transaction.accountId}
+                                                    </p>
+                                                </div>
+                                                <div className={styles.col3}>
+                                                    <p>{transaction.amount}</p>
+                                                    <p>
+                                                        {
+                                                            transaction
+                                                                .personalCategory
+                                                                .primary
+                                                        }
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className={styles.col3}>
-                                            <p>$170.00</p>
-                                            <p>..category</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className={`flex ${styles.transaction}`}>
-                                    <p>01/07/23</p>
-                                    <div className={`flex ${styles.info}`}>
-                                        <div className={styles.col2}>
-                                            <p>Chick-fil-a</p>
-                                            <p className={styles.account}>
-                                                USBank Altitude Go
-                                            </p>
-                                        </div>
-                                        <div className={styles.col3}>
-                                            <p>$10.00</p>
-                                            <p>Food</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className={`flex ${styles.transaction}`}>
-                                    <p>01/07/23</p>
-                                    <div className={`flex ${styles.info}`}>
-                                        <div className={styles.col2}>
-                                            <p>Aerotek Payroll</p>
-                                            <p className={styles.account}>
-                                                Chase Checking
-                                            </p>
-                                        </div>
-                                        <div className={styles.col3}>
-                                            <p>+$8208.90</p>
-                                            <p>Income</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className={`flex ${styles.transaction}`}>
-                                    <p>01/07/23</p>
-                                    <div className={`flex ${styles.info}`}>
-                                        <div className={styles.col2}>
-                                            <p>Chick-fil-a</p>
-                                            <p className={styles.account}>
-                                                USBank Altitude Go
-                                            </p>
-                                        </div>
-                                        <div className={styles.col3}>
-                                            <p>$10.00</p>
-                                            <p>Food</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className={`flex ${styles.transaction}`}>
-                                    <p>01/07/23</p>
-                                    <div className={`flex ${styles.info}`}>
-                                        <div className={styles.col2}>
-                                            <p>Chick-fil-a</p>
-                                            <p className={styles.account}>
-                                                USBank Altitude Go
-                                            </p>
-                                        </div>
-                                        <div className={styles.col3}>
-                                            <p>$10.00</p>
-                                            <p>Food</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                    ))
+                                ) : (
+                                    <p>no data</p>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -5,12 +5,12 @@ export default async function getAccessToken(
     res: NextApiResponse
 ) {
     if (req.method === 'POST') {
-        if (req.headers.cookie) {
-            const token = req.headers.cookie.split('=')[1];
+        if (req.cookies.auth) {
+            const token = req.cookies.auth;
 
             try {
                 const response = await fetch(
-                    `http://localhost:8000/api/v1/item/get_access_token`,
+                    `http://localhost:8000/api/v1/plaid/item/get_access_token`,
                     {
                         method: req.method,
                         headers: {
