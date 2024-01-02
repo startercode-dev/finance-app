@@ -21,17 +21,17 @@ export default function Home() {
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     try {
         const token = req.cookies.auth;
-
         if (token) {
             const authed = await authenticate(token);
-            // console.log(authed);
 
-            return {
-                redirect: {
-                    destination: '/dashboard',
-                    permanent: false,
-                },
-            };
+            if (authed === true) {
+                return {
+                    redirect: {
+                        destination: '/dashboard',
+                        permanent: false,
+                    },
+                };
+            }
         }
     } catch (error) {
         console.log('***INVALID OR EXPIRED TOKEN***');

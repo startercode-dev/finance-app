@@ -26,7 +26,7 @@ export default async function getAccessToken(
                 if (data.status === 'error') {
                     throw 'invalid token';
                 }
-                console.log(data);
+                // console.log(data);
 
                 res.status(200).json(data);
             } catch (err) {

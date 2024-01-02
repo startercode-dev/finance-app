@@ -12,6 +12,7 @@ const compression = require('compression');
 const authRouter = require('./routes/auth.routes');
 const accountRouter = require('./routes/account.routes');
 const itemRouter = require('./routes/item.routes');
+const transactionRouter = require('./routes/transaction.routes');
 const globalErrorController = require('./utils/error-handler');
 const AppError = require('./utils/app-error');
 
@@ -74,6 +75,7 @@ app.use(compression());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/account', accountRouter);
 app.use('/api/v1/item', itemRouter);
+app.use('/api/v1/transaction', transactionRouter);
 
 // GLOBAL ERR HANDLER **
 app.all('*', (req, res, next) => {

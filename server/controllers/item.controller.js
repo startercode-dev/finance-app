@@ -22,7 +22,7 @@ exports.getLinkToken = async (req, res, next) => {
             client_user_id: clientUserId,
         },
         client_name: 'Macro',
-        products: ['transactions'],
+        products: ['auth', 'transactions'],
         language: 'en',
         redirect_uri: 'http://localhost:8000/',
         country_codes: ['US'],

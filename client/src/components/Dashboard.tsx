@@ -37,7 +37,7 @@ export default function Dashboard() {
             });
 
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
         };
 
         exchangePublicTokenForAccessToken();
@@ -48,12 +48,17 @@ export default function Dashboard() {
         onSuccess,
     });
 
+    const getTransactions = async () => {
+        const response = await fetch('/api/get-transactions', {});
+    };
+
     useEffect(() => {
         const init = async () => {
             if (user.isAuth === false) {
                 await dispatch(getUserData());
-                generateToken();
             }
+            getTransactions();
+            generateToken();
         };
 
         init();
