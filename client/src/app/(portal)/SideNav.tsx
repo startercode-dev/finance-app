@@ -12,31 +12,26 @@ import clsx from 'clsx';
 import { MuseoModerno } from 'next/font/google';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+import { handleLogout } from './actions';
 
 const logoFont = MuseoModerno({ subsets: ['latin'] });
 
 const links = [
-  { name: 'Dashboard', href: '/portal/dashboard', icon: HomeModernIcon },
+  { name: 'Dashboard', href: '/dashboard', icon: HomeModernIcon },
   {
     name: 'Transactions',
-    href: '/portal/transactions',
+    href: '/transactions',
     icon: ArrowsRightLeftIcon,
   },
-  { name: 'Investments', href: '/portal/investments', icon: BanknotesIcon },
+  { name: 'Investments', href: '/investments', icon: BanknotesIcon },
 ];
 
-export default function SideNav() {
+export default function SideNav({ user }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleLogout = async () => {
-    await fetch('/api/logout', {
-      method: 'POST',
-    });
-    await router.push('/');
-    router.refresh();
-  };
+  const [isPending, startTransition] = useTransition();
 
   const [open, setOpen] = useState(true);
 
@@ -95,6 +90,7 @@ export default function SideNav() {
           >
             {open ? 'MACRO' : 'M'}
           </h1>
+
           <div className="flex flex-col gap-5 text-lg">
             {links.map((link) => {
               const LinkIcon = link.icon;
@@ -128,7 +124,17 @@ export default function SideNav() {
             })}
           </div>
 
-          <button onClick={handleLogout}>signout</button>
+          <button
+            onClick={() =>
+              startTransition(() => {
+                handleLogout();
+                router.push('/');
+                router.refresh();
+              })
+            }
+          >
+            signout
+          </button>
         </div>
 
         <div
@@ -147,7 +153,7 @@ export default function SideNav() {
             )}
           >
             <UserCircleIcon className="w-8" />
-            <p className="text-lg">Shaniqua</p>
+            <p className="text-lg">{user.name}</p>
           </div>
           <div
             className={clsx(

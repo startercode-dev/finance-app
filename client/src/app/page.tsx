@@ -6,13 +6,13 @@ export default function Home() {
       <div className="flex gap-5">
         <Link
           href="/login"
-          className="rounded border border-primary px-5 py-1 text-primary hover:bg-primary hover:text-white"
+          className="border-primary-dark text-primary-dark hover:bg-primary-dark rounded border px-5 py-1 hover:text-white"
         >
           Login
         </Link>
         <Link
           href="/signup"
-          className="rounded border border-primary px-5 py-1 text-primary hover:bg-primary hover:text-white"
+          className="border-primary-dark text-primary-dark hover:bg-primary-dark rounded border px-5 py-1 hover:text-white"
         >
           Sign Up
         </Link>

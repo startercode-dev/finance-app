@@ -47,7 +47,7 @@ const accountSchema = new mongoose.Schema(
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 const Account = mongoose.model('accounts', accountSchema);

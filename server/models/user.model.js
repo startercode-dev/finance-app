@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema(
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 userSchema.pre('save', async function (next) {
@@ -81,7 +81,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     if (this.passwordChangedAt) {
         const changedTimestamp = parseInt(
             this.passwordChangedAt.getTime() / 1000,
-            10
+            10,
         );
         return JWTTimestamp < changedTimestamp;
     }
@@ -92,7 +92,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
 userSchema.methods.correctPassword = async function (
     inputPassword,
-    userPassword
+    userPassword,
 ) {
     return await bcrypt.compare(inputPassword, userPassword);
 };

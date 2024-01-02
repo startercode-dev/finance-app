@@ -68,7 +68,7 @@ const transactionSchema = new mongoose.Schema(
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 transactionSchema.pre(/^find/, function (next) {

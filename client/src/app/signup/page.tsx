@@ -3,6 +3,7 @@
 import useInput from '@/hooks/useInput';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { handleSignup } from './actions';
 
 export default function Signup() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function Signup() {
     onBlur: passwordConfirmOnBlur,
   } = useInput((value) => value === password);
 
-  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handlerSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setServerErrorMessage('');
@@ -52,24 +53,13 @@ export default function Signup() {
       passwordConfirmIsValid
     ) {
       try {
-        const res = await fetch('/api/signup', {
-          method: 'POST',
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-            passwordConfirm,
-          }),
-        });
+        const res = await handleSignup(name, email, password, passwordConfirm);
 
-        const data = await res.json();
-        // console.log(data);
-
-        if (data.error) {
-          throw data.error;
+        if (res.status !== 'success') {
+          throw res;
         }
 
-        // router.push('/onboarding');
+        router.push('/onboarding');
       } catch (error) {
         // console.log(error);
         if (error.errorObj.code === 11000) {
@@ -83,10 +73,10 @@ export default function Signup() {
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <form onSubmit={handleSignup} className="form">
-        <div className="flex w-80 flex-col gap-3">
+      <form onSubmit={handlerSignup} className="form">
+        <div className="flex w-80 flex-col gap-5">
           <input
-            className="rounded border border-primary bg-inherit px-4 py-2 focus:outline-none"
+            className="rounded border border-primary-dark bg-inherit px-4 py-2 focus:outline-none"
             type="text"
             name="name"
             placeholder="Name"
@@ -97,7 +87,7 @@ export default function Signup() {
           {nameHasError && <p>! can't be empty</p>}
 
           <input
-            className="rounded border border-primary bg-inherit px-4 py-2 focus:outline-none"
+            className="rounded border border-primary-dark bg-inherit px-4 py-2 focus:outline-none"
             type="email"
             name="email"
             placeholder="email"
@@ -108,7 +98,7 @@ export default function Signup() {
           {emailHasError && <p>! need to be valid email</p>}
 
           <input
-            className="rounded border border-primary bg-inherit px-4 py-2 focus:outline-none"
+            className="rounded border border-primary-dark bg-inherit px-4 py-2 focus:outline-none"
             type="password"
             name="password"
             placeholder="password"
@@ -119,7 +109,7 @@ export default function Signup() {
           {passwordHasError && <p>! must be 2 or more</p>}
 
           <input
-            className="rounded border border-primary bg-inherit px-4 py-2 focus:outline-none"
+            className="rounded border border-primary-dark bg-inherit px-4 py-2 focus:outline-none"
             type="password"
             name="passwordConfirm"
             placeholder="passwordConfirm"
@@ -132,14 +122,14 @@ export default function Signup() {
           {serverErrorMessage && <p>{serverErrorMessage}</p>}
           <button
             type="submit"
-            className="rounded border border-primary px-4 py-2 text-primary hover:bg-primary hover:text-white"
+            className="rounded border border-primary-dark px-4 py-2 text-primary-dark hover:bg-primary-dark hover:text-white"
           >
             Sign Up
           </button>
           <button
             type="button"
             onClick={() => router.push('/')}
-            className="rounded border border-primary px-4 py-2 text-primary hover:bg-primary hover:text-white"
+            className="rounded border border-primary-dark px-4 py-2 text-primary-dark hover:bg-primary-dark hover:text-white"
           >
             Back
           </button>

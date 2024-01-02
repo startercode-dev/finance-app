@@ -17,11 +17,11 @@ const handleValidationErrorDB = (err) => {
 };
 
 const handleJWTError = () => {
-    new AppError('invalid token, please login again', 401);
+    AppError('invalid token, please login again', 401);
 };
 
 const handleJWTExpiredError = () => {
-    new AppError('expired token, please login again', 401);
+    AppError('expired token, please login again', 401);
 };
 
 const sendErrorDev = (err, req, res) => {
@@ -75,7 +75,7 @@ const sendErrorProd = (err, req, res) => {
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
-    
+
     if (process.env.NODE_ENV === 'development') {
         sendErrorDev(err, req, res);
     } else if (process.env.NODE_ENV === 'production') {

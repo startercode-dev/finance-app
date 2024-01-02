@@ -1,6 +1,3 @@
-const Item = require('../models/item.model');
-const Account = require('../models/account.model');
-const Transaction = require('../models/transaction.model');
 const {
     PlaidApi,
     Configuration,
@@ -8,6 +5,9 @@ const {
     WebhookType,
     SandboxItemFireWebhookRequestWebhookCodeEnum,
 } = require('plaid');
+const Item = require('../models/item.model');
+const Account = require('../models/account.model');
+const Transaction = require('../models/transaction.model');
 
 const configuration = new Configuration({
     basePath: PlaidEnvironments[process.env.PLAID_ENV],
@@ -21,7 +21,7 @@ const configuration = new Configuration({
 });
 const client = new PlaidApi(configuration);
 
-let webhookUrl =
+const webhookUrl =
     process.env.WEBHOOK_URL || 'https://www.example.com/server/plaid_webhook';
 
 // console.log(webhookUrl);
@@ -133,7 +133,7 @@ exports.getAccounts = async (req, res, next) => {
 
     try {
         const response = await client.accountsGet(request);
-        const accounts = response.data.accounts;
+        const { accounts } = response.data;
 
         await Promise.all(
             accounts.map(async (account) => {
@@ -149,7 +149,7 @@ exports.getAccounts = async (req, res, next) => {
                         subtype: account.subtype,
                     });
                 }
-            })
+            }),
         );
 
         res.status(201).json({
@@ -186,7 +186,7 @@ exports.getTransactions = async (req, res, next) => {
         try {
             const response = await client.transactionsGet(request);
             let transaction = response.data.transactions;
-            const total_transactions = response.data.total_transactions;
+            const { total_transactions } = response.data;
             // console.log(transactions.length);
 
             // PAGINATED REQUEST TO GET ALL AVAILABLE TRANSACTIONS
@@ -200,11 +200,10 @@ exports.getTransactions = async (req, res, next) => {
                         include_personal_finance_category: true,
                     },
                 };
-                const paginatedResponse = await client.transactionsGet(
-                    paginatedRequest
-                );
+                const paginatedResponse =
+                    await client.transactionsGet(paginatedRequest);
                 transaction = transaction.concat(
-                    paginatedResponse.data.transactions
+                    paginatedResponse.data.transactions,
                 );
                 // console.log(transactions.length);
             }
@@ -245,7 +244,7 @@ exports.getTransactions = async (req, res, next) => {
                         pending: transaction.pending,
                     });
                 }
-            })
+            }),
         );
 
         res.status(201).json({
