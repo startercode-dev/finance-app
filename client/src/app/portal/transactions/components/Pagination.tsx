@@ -11,7 +11,31 @@ export default function Pagination({ data }) {
   const limit = searchParams.get('limit') ?? '25';
 
   const totalPage = Math.ceil(data.totalTransactions / data.currentLimit);
+  // console.log(totalPage);
   // console.log(data.currentPage === totalPage - 2);
+  const staticButtons = () => {
+    const buttons = [];
+
+    for (let i = 1; i <= totalPage; i++) {
+      buttons.push(
+        <button
+          onClick={() => {
+            router.push(
+              `/portal/transactions?page=${Number(i)}&limit=${limit}`,
+            );
+          }}
+          className={clsx('h-10 w-10', {
+            'rounded border border-black bg-white drop-shadow-card':
+              data.currentPage === i,
+          })}
+        >
+          {i}
+        </button>,
+      );
+    }
+
+    return buttons;
+  };
 
   return (
     <div className="mt-12 flex w-full justify-center gap-8">
@@ -32,164 +56,168 @@ export default function Pagination({ data }) {
         Previous
       </button>
 
-      <div className="flex items-center gap-2 text-lg">
-        <button
-          onClick={() => {
-            router.push(
-              `/portal/transactions?page=${Number(1)}&limit=${limit}`,
-            );
-          }}
-          className={clsx('h-10 w-10', {
-            'rounded border border-black bg-white drop-shadow-card':
-              data.currentPage === 1,
-          })}
-        >
-          1
-        </button>
+      {totalPage >= 6 ? (
+        <div className="flex items-center gap-2 text-lg">
+          <button
+            onClick={() => {
+              router.push(
+                `/portal/transactions?page=${Number(1)}&limit=${limit}`,
+              );
+            }}
+            className={clsx('h-10 w-10', {
+              'rounded border border-black bg-white drop-shadow-card':
+                data.currentPage === 1,
+            })}
+          >
+            1
+          </button>
 
-        {data.currentPage <= 3 && (
-          <>
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${Number(2)}&limit=${limit}`,
-                );
-              }}
-              className={clsx('h-10 w-10', {
-                'rounded border border-black bg-white drop-shadow-card':
-                  data.currentPage === 2,
-              })}
-            >
-              2
-            </button>
+          {data.currentPage <= 3 && (
+            <>
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${Number(2)}&limit=${limit}`,
+                  );
+                }}
+                className={clsx('h-10 w-10', {
+                  'rounded border border-black bg-white drop-shadow-card':
+                    data.currentPage === 2,
+                })}
+              >
+                2
+              </button>
 
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${Number(3)}&limit=${limit}`,
-                );
-              }}
-              className={clsx('h-10 w-10', {
-                'rounded border border-black bg-white drop-shadow-card':
-                  data.currentPage === 3,
-              })}
-            >
-              3
-            </button>
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${Number(3)}&limit=${limit}`,
+                  );
+                }}
+                className={clsx('h-10 w-10', {
+                  'rounded border border-black bg-white drop-shadow-card':
+                    data.currentPage === 3,
+                })}
+              >
+                3
+              </button>
 
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${Number(4)}&limit=${limit}`,
-                );
-              }}
-              className={clsx('h-10 w-10', {
-                'rounded border border-black bg-white drop-shadow-card':
-                  data.currentPage === 4,
-              })}
-            >
-              4
-            </button>
-          </>
-        )}
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${Number(4)}&limit=${limit}`,
+                  );
+                }}
+                className={clsx('h-10 w-10', {
+                  'rounded border border-black bg-white drop-shadow-card':
+                    data.currentPage === 4,
+                })}
+              >
+                4
+              </button>
+            </>
+          )}
 
-        {data.currentPage >= 4 && <p>...</p>}
+          {data.currentPage >= 4 && totalPage > 4 && <p>...</p>}
 
-        {data.currentPage >= 4 && data.currentPage <= totalPage - 3 && (
-          <>
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${
-                    data.currentPage - 1
-                  }&limit=${limit}`,
-                );
-              }}
-              className={'h-10 w-10'}
-            >
-              {data.currentPage - 1}
-            </button>
+          {data.currentPage >= 4 && data.currentPage <= totalPage - 3 && (
+            <>
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${
+                      data.currentPage - 1
+                    }&limit=${limit}`,
+                  );
+                }}
+                className={'h-10 w-10'}
+              >
+                {data.currentPage - 1}
+              </button>
 
-            <button className="h-10 w-10 rounded border border-black bg-white  drop-shadow-card">
-              {data.currentPage}
-            </button>
+              <button className="h-10 w-10 rounded border border-black bg-white  drop-shadow-card">
+                {data.currentPage}
+              </button>
 
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${
-                    data.currentPage + 1
-                  }&limit=${limit}`,
-                );
-              }}
-              className="h-10 w-10"
-            >
-              {data.currentPage + 1}
-            </button>
-          </>
-        )}
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${
+                      data.currentPage + 1
+                    }&limit=${limit}`,
+                  );
+                }}
+                className="h-10 w-10"
+              >
+                {data.currentPage + 1}
+              </button>
+            </>
+          )}
 
-        {data.currentPage < totalPage - 2 && <p>...</p>}
+          {data.currentPage < totalPage - 2 && <p>...</p>}
 
-        {data.currentPage >= totalPage - 2 && (
-          <>
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${totalPage - 3}&limit=${limit}`,
-                );
-              }}
-              className={clsx('h-10 w-10', {
-                'rounded border border-black bg-white drop-shadow-card':
-                  data.currentPage === totalPage - 3,
-              })}
-            >
-              {totalPage - 3}
-            </button>
+          {data.currentPage >= totalPage - 2 && (
+            <>
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${totalPage - 3}&limit=${limit}`,
+                  );
+                }}
+                className={clsx('h-10 w-10', {
+                  'rounded border border-black bg-white drop-shadow-card':
+                    data.currentPage === totalPage - 3,
+                })}
+              >
+                {totalPage - 3}
+              </button>
 
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${totalPage - 2}&limit=${limit}`,
-                );
-              }}
-              className={clsx('h-10 w-10', {
-                'rounded border border-black bg-white drop-shadow-card':
-                  data.currentPage === totalPage - 2,
-              })}
-            >
-              {totalPage - 2}
-            </button>
-            <button
-              onClick={() => {
-                router.push(
-                  `/portal/transactions?page=${totalPage - 1}&limit=${limit}`,
-                );
-              }}
-              className={clsx('h-10 w-10', {
-                'rounded border border-black bg-white drop-shadow-card':
-                  data.currentPage === totalPage - 1,
-              })}
-            >
-              {totalPage - 1}
-            </button>
-          </>
-        )}
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${totalPage - 2}&limit=${limit}`,
+                  );
+                }}
+                className={clsx('h-10 w-10', {
+                  'rounded border border-black bg-white drop-shadow-card':
+                    data.currentPage === totalPage - 2,
+                })}
+              >
+                {totalPage - 2}
+              </button>
+              <button
+                onClick={() => {
+                  router.push(
+                    `/portal/transactions?page=${totalPage - 1}&limit=${limit}`,
+                  );
+                }}
+                className={clsx('h-10 w-10', {
+                  'rounded border border-black bg-white drop-shadow-card':
+                    data.currentPage === totalPage - 1,
+                })}
+              >
+                {totalPage - 1}
+              </button>
+            </>
+          )}
 
-        <button
-          onClick={() => {
-            router.push(
-              `/portal/transactions?page=${totalPage}&limit=${limit}`,
-            );
-          }}
-          className={clsx('h-10 w-10', {
-            'rounded border border-black bg-white drop-shadow-card':
-              data.currentPage === totalPage,
-          })}
-        >
-          {totalPage}
-        </button>
-      </div>
+          <button
+            onClick={() => {
+              router.push(
+                `/portal/transactions?page=${totalPage}&limit=${limit}`,
+              );
+            }}
+            className={clsx('h-10 w-10', {
+              'rounded border border-black bg-white drop-shadow-card':
+                data.currentPage === totalPage,
+            })}
+          >
+            {totalPage}
+          </button>
+        </div>
+      ) : (
+        <div>{staticButtons()}</div>
+      )}
 
       <button
         onClick={() => {

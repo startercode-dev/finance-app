@@ -24,7 +24,7 @@ async function syncPlaidData() {
 
   // Get today's date, and 24m ago date
   const today = new Date();
-  const startDate = new Date(new Date(today).setDate(today.getDate() - 30))
+  const startDate = new Date(new Date(today).setDate(today.getDate() - 150))
     .toISOString()
     .split('T')[0];
   const endDate = new Date().toISOString().split('T')[0];
@@ -79,7 +79,7 @@ async function fetchDashboard() {
 }
 
 export default async function DashboardPage() {
-  await syncPlaidData();
+  // await syncPlaidData();
   const {
     currMonthSpending,
     transactions1m,

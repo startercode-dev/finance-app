@@ -6,9 +6,6 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 });
 
-const app = require('./app');
-const webhookApp = require('./webhookApp');
-
 let DB;
 if (process.env.NODE_ENV) {
     dotenv.config({ path: `./.env.${process.env.NODE_ENV}` });
@@ -20,6 +17,9 @@ if (process.env.NODE_ENV) {
     dotenv.config({ path: `./.env.local` });
     DB = process.env.DATABASE_LOCAL;
 }
+
+const app = require('./app');
+const webhookApp = require('./webhookApp');
 
 mongoose.set('strictQuery', true);
 const connectDB = async () => {

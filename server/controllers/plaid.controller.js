@@ -1,10 +1,4 @@
-const {
-    PlaidApi,
-    Configuration,
-    PlaidEnvironments,
-    WebhookType,
-    SandboxItemFireWebhookRequestWebhookCodeEnum,
-} = require('plaid');
+const { PlaidApi, Configuration, PlaidEnvironments } = require('plaid');
 const Item = require('../models/item.model');
 const Account = require('../models/account.model');
 const Transaction = require('../models/transaction.model');
@@ -31,14 +25,12 @@ exports.fireWebhook = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
     const accessTokens = items[0].accessToken;
 
-    // console.log(accessTokens);
-
     try {
         const fireWebhookRes = await client.sandboxItemFireWebhook({
             access_token: accessTokens,
             webhook_code: 'DEFAULT_UPDATE',
         });
-        console.log(fireWebhookRes.data);
+        // console.log(fireWebhookRes);
         res.status(200).json(fireWebhookRes.data);
     } catch (error) {
         console.log(error);
