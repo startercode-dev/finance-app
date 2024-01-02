@@ -5,13 +5,16 @@ export const getUserData = () => {
     return async (dispatch: AppDispatch) => {
         try {
             const response = await fetch('/api/user');
-            const { data } = await response.json();
 
             if (!response.ok) {
                 throw new Error('failed to fetch data');
             }
 
-            dispatch(userActions.setUser(data));
+            // const { data } = await response.json();
+            // console.log(data);
+            // dispatch(userActions.setUser(data));
+
+            dispatch(userActions.setAuth(true));
         } catch (err) {
             console.log(err);
         }

@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
+import { authenticate } from './utils/authenticate';
 
 export default async function middleware(req: NextRequest) {
     const token = req.cookies.get('auth')?.value;
@@ -7,10 +7,7 @@ export default async function middleware(req: NextRequest) {
     if (req.nextUrl.pathname.startsWith('/dashboard')) {
         if (token) {
             try {
-                await jwtVerify(
-                    token,
-                    new TextEncoder().encode(process.env.JWT_SECRET)
-                );
+                await authenticate(token);
 
                 return NextResponse.next();
             } catch (err) {

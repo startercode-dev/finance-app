@@ -1,23 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface User {
-    id: string;
-    name: string;
-    email: string;
+    isAuth: boolean;
 }
 
 const initialState: User = {
-    id: '',
-    name: '',
-    email: '',
+    isAuth: false,
 };
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUser: (state, action) => {
-            return { ...state, ...action.payload };
+        setAuth: (state, action) => {
+            state.isAuth = action.payload;
         },
     },
 });

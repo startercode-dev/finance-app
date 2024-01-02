@@ -29,10 +29,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                 cookie.serialize('auth', data.token, {
                     httpOnly: true,
                     maxAge: 60 * 60 * process.env.JWT_COOKIE_EXP, // in seconds
-                    secure:
-                        process.env.NODE_ENV !== 'development' ||
-                        req.headers['x-forwarded-proto'] === 'https',
-
+                    secure: process.env.NODE_ENV !== 'development',
                     sameSite: 'strict',
                     path: '/',
                 })

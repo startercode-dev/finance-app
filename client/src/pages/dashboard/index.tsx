@@ -7,16 +7,17 @@ export default function Dashboard() {
     const user = useAppSelector((state) => state.user);
 
     useEffect(() => {
-        if (user.id === '') {
+        if (user.isAuth === false) {
             dispatch(getUserData());
         }
     }, []);
 
     return (
         <>
-            <h1>{user.name}</h1>
-            <h2>{user.email}</h2>
-            <h2>{user.id}</h2>
+            <h1>dashboard</h1>
+            <h2>{user.isAuth ? 'auth' : 'not auth'}</h2>
         </>
     );
 }
+
+//! Look into using getServersideprops for this as well, so the first render won't be 'not auth'
