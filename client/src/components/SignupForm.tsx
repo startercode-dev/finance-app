@@ -1,5 +1,5 @@
 import useInput from '@/hooks/useInput';
-import styles from './Form.module.css';
+import styles from '@/styles/Form.module.scss';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

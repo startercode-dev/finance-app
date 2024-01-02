@@ -7,7 +7,7 @@ export const getUserData = () => {
             const response = await fetch('/api/user');
 
             if (!response.ok) {
-                throw new Error('failed to fetch data');
+                throw 'failed to fetch data';
             }
 
             // const { data } = await response.json();

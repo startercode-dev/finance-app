@@ -1,9 +1,13 @@
+@import './variables';
+
 .main {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100svh;
+
+    font-size: 1.4rem;
 }
 
 .auth {
@@ -12,8 +16,8 @@
 }
 
 .authLink {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--foreground);
+    padding: 0.5rem 2rem;
+    border: 1px solid $primary;
     border-radius: 0.5rem;
 }
 

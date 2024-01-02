@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Home.module.scss';
 import Link from 'next/link';
 import { GetServerSideProps } from 'next';
 import { authenticate } from '@/utils/authenticate';
@@ -23,7 +23,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         const token = req.cookies.auth;
 
         if (token) {
-            await authenticate(token);
+            const yoo = await authenticate(token);
+            console.log(yoo);
 
             return {
                 redirect: {
