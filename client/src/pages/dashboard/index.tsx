@@ -10,6 +10,7 @@ import MonthlySpending from '@/components/MonthlySpending';
 import Nav from '@/components/Nav';
 import 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ export default function Dashboard() {
     const totalAmount = amounts.reduce((acc, amount) => acc + amount, 0);
     return { category, totalAmount };
   });
-  console.log(sumCategories);
+  // console.log(sumCategories);
 
   const categories = sumCategories.map((i) => i.category);
   // console.log(categories);
@@ -65,41 +66,62 @@ export default function Dashboard() {
 
   return (
     <main>
+      <div className="flex py-2 border-b border-b-dark justify-around">
+        <p>SPY</p>
+        <p>QQQ</p>
+        <p>DIA</p>
+        <p>USD/JPY</p>
+      </div>
       <Nav />
-      <div className="w-full h-[calc(100vh-144px)] grid grid-cols-38/61">
+      <div className="w-full h-[calc(100vh-153px)] grid grid-cols-38/61">
         <div className="grid grid-rows-col1 h-[inhert]">
           <MonthlySpending />
-          <div className="card mx-12 mb-12 flex justify-center">
-            <Doughnut
-              data={{
-                labels: categories,
-                datasets: [
-                  {
-                    label: 'Monthly Categories',
-                    data: sums,
-                    backgroundColor: [
-                      '#AACA94',
-                      '#F4907A',
-                      '#5B867A',
-                      '#EDD698',
-                      '#D295A1',
-                      '#855E95',
-                    ],
-                    hoverOffset: 4,
+          <div className="card mx-12 mb-12 flex justify-center items-center">
+            <div className="w-[99%] h-full">
+              <Doughnut
+                data={{
+                  labels: categories,
+                  datasets: [
+                    {
+                      label: 'Monthly Total',
+                      data: sums,
+                      backgroundColor: [
+                        '#AACA94',
+                        '#F4907A',
+                        '#5B867A',
+                        '#D295A1',
+                        '#855E95',
+                        '#EDD698',
+                        '#F4907A',
+                        '#5B867A',
+                        '#EDD698',
+                        '#D295A1',
+                        '#855E95',
+                      ],
+                      hoverOffset: 4,
+                    },
+                  ],
+                }}
+                options={{
+                  layout: {
+                    padding: 20,
                   },
-                ],
-              }}
-              options={{
-                responsive: true,
-                aspectRatio: 5 / 4,
-                maintainAspectRatio: true,
-                plugins: {
-                  legend: {
-                    position: 'right',
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      labels: {
+                        font: {
+                          family: 'Red Hat Display, Arial, sans-serif',
+                          weight: '200',
+                        },
+                        usePointStyle: true,
+                      },
+                      position: 'right',
+                    },
                   },
-                },
-              }}
-            />
+                }}
+              />
+            </div>
           </div>
           <div className="card mx-12 mb-12"></div>
         </div>
@@ -109,12 +131,9 @@ export default function Dashboard() {
 
           {/* //* STOCK */}
           <div className="grid grid-cols-3 mr-12 mb-12 gap-x-12">
-            <div className="card mb-6"></div>
-            <div className="card mb-6"></div>
-            <div className="card mb-6"></div>
-            <div className="card mt-6"></div>
-            <div className="card mt-6"></div>
-            <div className="card mt-6"></div>
+            <div className="card"></div>
+            <div className="card"></div>
+            <div className="card"></div>
           </div>
         </div>
       </div>

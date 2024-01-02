@@ -2,11 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function getTransactions(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse,
 ) {
-    if (req.method === 'GET') {
+    if (req.method === 'POST') {
         if (req.cookies.auth) {
             const token = req.cookies.auth;
+            // console.log(req.body);
 
             try {
                 const response = await fetch(
@@ -17,7 +18,8 @@ export default async function getTransactions(
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                        body: req.body,
+                    },
                 );
 
                 const data = await response.json();

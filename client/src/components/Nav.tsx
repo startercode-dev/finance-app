@@ -21,7 +21,7 @@ export default function Nav() {
   };
 
   return (
-    <nav className="flex w-full py-12 px-12">
+    <nav className="flex w-full py-8 px-12">
       <h2
         className={`${Logo.className} text-primary text-2xl px-8 py-[7px] mr-8 border border-dark rounded-lg small-card`}
       >

@@ -18,11 +18,64 @@ export default function RecentTransaction() {
     );
   });
 
+  const formatDate = function (date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const endDate = formatDate(currentDate);
+
   //* UPDATES DB WITH NEW TRANSACTIONS
-  const getTransactions = async () => {
+  const getStartDate1m = function () {
+    const monthsAgo = currentDate.getMonth() - 1;
+    currentDate.setMonth(monthsAgo);
+    return currentDate;
+  };
+
+  const getTransactions1m = async () => {
+    const startDate = formatDate(getStartDate1m());
+    // console.log(startDate, endDate);
+
+    const body = {
+      endDate,
+      startDate,
+    };
+
     try {
       await fetch('/api/get-transactions', {
-        method: 'GET',
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+
+      dispatch(getTransactionsData());
+
+      // console.log('success');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getStartDate24m = function () {
+    const monthsAgo = currentDate.getMonth() - 24;
+    currentDate.setMonth(monthsAgo);
+    return currentDate;
+  };
+
+  const getTransactions24m = async () => {
+    const startDate = formatDate(getStartDate24m());
+    // console.log(startDate, endDate);
+
+    const body = {
+      endDate,
+      startDate,
+    };
+    try {
+      await fetch('/api/get-transactions', {
+        method: 'POST',
+        body: JSON.stringify(body),
       });
 
       dispatch(getTransactionsData());
@@ -42,7 +95,7 @@ export default function RecentTransaction() {
             <ArrowsClockwise
               size={22}
               className="cursor-pointer text-secondary hover:rotate-180 transition-all duration-300"
-              onClick={getTransactions}
+              onClick={getTransactions1m}
             />
           </>
         ) : (
@@ -51,7 +104,8 @@ export default function RecentTransaction() {
               Welcome to your dashboard!
             </h3>
             <p className="text-xl font-light">
-              Let&#39;s get started by syncing up all your transactions.
+              Let&#39;s get started by syncing up all your transactions from
+              past 24 months.
             </p>
           </div>
         )}
@@ -69,7 +123,7 @@ export default function RecentTransaction() {
           })
         ) : (
           <button
-            onClick={getTransactions}
+            onClick={getTransactions24m}
             className="border border-primary bg-primary text-lg text-white rounded-md px-8 py-2 hover:text-primary hover:bg-white transition-all"
           >
             Sync transactions !

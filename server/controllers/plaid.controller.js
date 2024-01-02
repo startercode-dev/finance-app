@@ -125,12 +125,14 @@ exports.getTransactions = async (req, res, next) => {
     const existingIds = currTransactions.map((t) => t.transactionId);
     // console.log(existing_ids.length);
 
+    // console.log(req.body.endDate);
+
     //* CREATE AND ARRAY OF PROMISES FROM ALL THE ACCESS TOKENS
     const promises = accessTokens.map(async (accessToken) => {
         const request = {
             access_token: accessToken,
-            start_date: '2023-01-01', //note: need to be dynamic.
-            end_date: '2023-12-01', //note: need to be dynamic.
+            start_date: req.body.startDate, //note: need to be dynamic.
+            end_date: req.body.endDate, //note: need to be dynamic.
             options: {
                 include_personal_finance_category: true,
             },
@@ -145,8 +147,8 @@ exports.getTransactions = async (req, res, next) => {
             while (transaction.length < total_transactions) {
                 const paginatedRequest = {
                     access_token: accessToken,
-                    start_date: '2023-01-01',
-                    end_date: '2023-12-01',
+                    start_date: req.body.startDate,
+                    end_date: req.body.endDate,
                     options: {
                         offset: transaction.length,
                         include_personal_finance_category: true,
