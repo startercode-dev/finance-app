@@ -1,10 +1,12 @@
 import useInput from '@/hooks/useInput';
 import styles from './Form.module.css';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-export default function SigninForm() {
+export default function LoginForm() {
     const router = useRouter();
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const [serverErrorMessage, setServerErrorMessage] = useState('');
 
     const {
         value: email,
@@ -25,8 +27,9 @@ export default function SigninForm() {
     const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        setServerErrorMessage('');
         if (emailIsValid && passwordIsValid) {
-            const res = await fetch('/api/signup', {
+            const res = await fetch('/api/login', {
                 method: 'POST',
                 body: JSON.stringify({
                     email,
@@ -34,9 +37,14 @@ export default function SigninForm() {
                 }),
             });
 
-            console.log(await res.json());
+            const data = await res.json();
 
-            router.push('/dashboard');
+            if (data.status === 'failed') {
+                setServerErrorMessage(data.msg);
+                return;
+            }
+
+            router.push('/');
         }
     };
 
@@ -63,6 +71,7 @@ export default function SigninForm() {
                 />
                 {passwordHasError && <p>must be 2 or more</p>}
 
+                {serverErrorMessage && <p>{serverErrorMessage}</p>}
                 <button type="submit">Login</button>
                 <button type="button" onClick={() => router.back()}>
                     Back

@@ -8,10 +8,9 @@ export default async function handler(
 ) {
     if (req.method === 'POST') {
         const body = req.body;
-
         try {
             const response = await fetch(
-                'http://localhost:8000/api/v1/auth/signup',
+                'http://localhost:8000/api/v1/auth/login',
                 {
                     method: req.method,
                     headers: {
@@ -20,11 +19,11 @@ export default async function handler(
                     body: body,
                 }
             );
-            const data = await response.json();
-            // console.log(data.error);
 
-            if (data.status === 'error') {
-                throw data.error;
+            const data = await response.json();
+
+            if (data.status === 'failed') {
+                throw data;
             }
 
             res.setHeader(
