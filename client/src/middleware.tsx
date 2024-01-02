@@ -1,24 +1,29 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { verify } from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 
-const secret = 'jjjjjkkkkk';
+const secret = process.env.JWT_SECRET;
 
-export default function middleware(req: NextRequest) {
-    // if (req.nextUrl.pathname.startsWith('/dashboard')) {
-    //     const cookie = req.cookies.get('auth');
-    //     const jwt = cookies.auth;
-    //     const url = req.url;
-    //     if (url.includes('/dashboard')) {
-    //         if (jwt === undefined) {
-    //             return NextResponse.redirect('/login');
-    //         }
-    //         try {
-    //             verify(jwt, secret);
-    //             return NextResponse.next();
-    //         } catch (err) {
-    //             return NextResponse.redirect('/login');
-    //         }
-    //     }
-    //     return NextResponse.next();
-    // }
+export default async function middleware(req: NextRequest) {
+    const token = req.cookies.get('auth')?.value;
+
+    if (req.nextUrl.pathname.startsWith('/dashboard')) {
+        if (token) {
+            try {
+                const verified = await jwtVerify(
+                    token,
+                    new TextEncoder().encode(secret)
+                );
+
+                console.log(verified.payload);
+
+                return NextResponse.next();
+            } catch (err) {
+                console.log('***INVALID OR EXPIRED TOKEN***');
+                return NextResponse.redirect(new URL('/login', req.url));
+            }
+        }
+        return NextResponse.redirect(new URL('/login', req.url));
+    }
+
+    return NextResponse.next();
 }

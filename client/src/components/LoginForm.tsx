@@ -24,7 +24,7 @@ export default function LoginForm() {
         onBlur: passwordOnBlur,
     } = useInput((value) => value.length > 2);
 
-    const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handlerLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setServerErrorMessage('');
@@ -44,12 +44,12 @@ export default function LoginForm() {
                 return;
             }
 
-            router.push('/');
+            router.push('/dashboard');
         }
     };
 
     return (
-        <form onSubmit={handleSignup} className={styles.form}>
+        <form onSubmit={handlerLogin} className={styles.form}>
             <div className={styles.inputs}>
                 <input
                     type="email"
