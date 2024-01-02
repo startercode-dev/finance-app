@@ -1,21 +1,33 @@
 import { cookies } from 'next/headers';
 import TransactionItem from '@/app/portal/dashboard/components/TransactionItem';
+import Pagination from './components/Pagination';
 
-async function fetchTransactions() {
+async function fetchTransactions(page: number, limit: number) {
   const token = cookies().get('auth');
 
-  const res = await fetch(`http://localhost:8000/api/v1/transaction/get`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token?.value}`,
+  const res = await fetch(
+    `http://localhost:8000/api/v1/transaction/get?page=${page}&limit=${limit}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token?.value}`,
+      },
+      cache: 'no-store',
     },
-    cache: 'no-store',
-  });
+  );
 
   return res.json();
 }
-export default async function TransactionsPage() {
-  const { transactions } = await fetchTransactions();
+
+export default async function TransactionsPage({ searchParams }) {
+  const page = searchParams['page'] ?? '1';
+  const limit = searchParams['limit'] ?? '25';
+
+  const { currentPage, currentLimit, transactions, totalTransactions } =
+    await fetchTransactions(page, limit);
+
+  const pagination = { currentLimit, currentPage, totalTransactions };
 
   return (
     <div className="h-full w-full cursor-default overflow-y-scroll p-12">
@@ -48,6 +60,8 @@ export default async function TransactionsPage() {
             </ul>
           </div>
         </div>
+
+        <Pagination data={pagination} />
       </div>
     </div>
   );

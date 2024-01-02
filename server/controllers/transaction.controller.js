@@ -2,6 +2,7 @@ const Transaction = require('../models/transaction.model');
 const Account = require('../models/account.model');
 const catchAsync = require('../utils/catch-async');
 const { getMonthlySpending } = require('../utils/helpers');
+const AppError = require('../utils/app-error');
 
 exports.fetchTransactions = catchAsync(async (req, res, next) => {
     // Adding user to the query & exclude certain fields
@@ -34,14 +35,32 @@ exports.fetchTransactions = catchAsync(async (req, res, next) => {
     }
 
     // Pagination
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || 25;
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
+
+    if (req.query.page) {
+        const total = await Transaction.countDocuments();
+        if (skip >= total) {
+            return next(new AppError('no more transactions', 404));
+        }
+    }
 
     // Exec the query
     const transactions = await query;
+    const totalTransactions = await Transaction.countDocuments();
+    const currentPage = page;
+    const currentLimit = limit;
 
     res.status(200).json({
         status: 'success',
         results: transactions.length,
+        totalTransactions,
         transactions,
+        currentPage,
+        currentLimit,
     });
 });
 

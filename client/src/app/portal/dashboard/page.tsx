@@ -4,6 +4,7 @@ import InitFetchBtn from '@/app/portal/dashboard/components/InitFetchBtn';
 import CardBalances from '@/app/portal/dashboard/components/CardBalances';
 import TopCategories from '@/app/portal/dashboard/components/TopCategories';
 import CurrentSpending from '@/app/portal/dashboard/components/CurrentSpending';
+import { initFetch } from './actions';
 
 async function getUser() {
   const token = cookies().get('auth');
@@ -17,6 +18,48 @@ async function getUser() {
   });
   const { data } = await res.json();
   return data;
+}
+
+async function syncPlaidData() {
+  const token = cookies().get('auth')?.value;
+
+  // Get today's date, and 24m ago date
+  const today = new Date();
+  const startDate = new Date(new Date(today).setDate(today.getDate() - 1))
+    .toISOString()
+    .split('T')[0];
+  const endDate = new Date().toISOString().split('T')[0];
+
+  const accounts = await fetch(
+    `http://localhost:8000/api/v1/plaid/accounts/get`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  const accountsData = await accounts.json();
+  if (accountsData.status !== 'success') {
+    console.log(accountsData);
+  }
+
+  const transactions = await fetch(
+    `http://localhost:8000/api/v1/plaid/transactions/get`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ startDate, endDate }),
+    },
+  );
+  const transactionsData = await transactions.json();
+  if (transactionsData.status !== 'success') {
+    console.log(transactionsData);
+  }
 }
 
 async function fetchDashboard() {
@@ -37,6 +80,7 @@ async function fetchDashboard() {
 }
 
 export default async function DashboardPage() {
+  await syncPlaidData();
   const {
     currMonthSpending,
     transactions1m,
