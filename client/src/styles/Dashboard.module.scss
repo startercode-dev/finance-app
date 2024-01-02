@@ -122,5 +122,15 @@
         .col3 {
             text-align: right;
         }
+
+        .editBtn {
+            opacity: 0;
+        }
+
+        .transaction:hover {
+            .editBtn {
+                opacity: 1;
+            }
+        }
     }
 }

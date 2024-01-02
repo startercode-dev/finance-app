@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
+const Account = require('./account.model');
 
 const transactionSchema = new mongoose.Schema(
     {
-        accountId: {
-            type: String,
-            trim: true,
-        },
-
         date: {
             type: String,
             trim: true,
@@ -57,6 +53,12 @@ const transactionSchema = new mongoose.Schema(
             trim: true,
         },
 
+        account: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Account',
+            required: [true, 'must belong to a users account'],
+        },
+
         user: {
             type: mongoose.Schema.ObjectId,
             ref: 'User',
@@ -68,6 +70,16 @@ const transactionSchema = new mongoose.Schema(
         toObject: { virtuals: true },
     }
 );
+
+transactionSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'account',
+        model: Account,
+        select: 'accountOfficialName',
+    });
+
+    next();
+});
 
 const Transaction = mongoose.model('transactions', transactionSchema);
 

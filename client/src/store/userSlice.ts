@@ -3,13 +3,25 @@ import { createSlice } from '@reduxjs/toolkit';
 interface User {
     name: string;
     newUser: boolean;
-    transactions: Array<Transaction>;
-    plaidLinkToken: String;
+    transactions: Transaction[];
+    plaidLinkToken: string;
 }
 
 interface Transaction {
-    date: String;
-    amount: Number;
+    transactionId: string;
+    date: string;
+    amount: number;
+    authorizedDate: string;
+    transactionName: string;
+    account: {
+        accountOfficialName: string;
+    };
+    category: [];
+    personalCategory: {
+        detailed: string;
+        primary: string;
+    };
+    activeCategory: string;
 }
 
 const initialState: User = {

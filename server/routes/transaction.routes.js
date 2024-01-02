@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.use(authController.protect);
 router.get('/get-all', transactionController.getAll);
+router.patch('/:id', transactionController.updateTransaction);
 
 module.exports = router;

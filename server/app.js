@@ -10,7 +10,7 @@ const hpp = require('hpp');
 const cors = require('cors');
 const compression = require('compression');
 const authRouter = require('./routes/auth.routes');
-const accountRouter = require('./routes/account.routes');
+const userRouter = require('./routes/user.routes');
 const plaidRouter = require('./routes/plaid.routes');
 const transactionRouter = require('./routes/transaction.routes');
 const globalErrorController = require('./utils/error-handler');
@@ -73,7 +73,7 @@ app.use(compression());
 
 // SERVER-SIDE ROUTES **
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/account', accountRouter);
+app.use('/api/v1/user', userRouter);
 app.use('/api/v1/plaid', plaidRouter);
 app.use('/api/v1/transaction', transactionRouter);
 

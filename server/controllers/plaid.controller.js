@@ -1,4 +1,5 @@
 const Item = require('../models/item.model');
+const Account = require('../models/account.model');
 const Transaction = require('../models/transaction.model');
 const { PlaidApi, Configuration, PlaidEnvironments } = require('plaid');
 
@@ -62,12 +63,53 @@ exports.getAccessToken = async (req, res, next) => {
     }
 };
 
+exports.getAccounts = async (req, res, next) => {
+    const items = await Item.find({ user: req.user._id });
+    const accessTokens = items.map((item) => item.accessToken);
+
+    const currAccounts = await Account.find({ user: req.user._id });
+    const existingAccounts = currAccounts.map((t) => t.accountId);
+
+    const request = {
+        access_token: accessTokens[0],
+    };
+
+    try {
+        const response = await client.accountsGet(request);
+        const accounts = response.data.accounts;
+
+        await Promise.all(
+            accounts.map(async (account) => {
+                if (existingAccounts.indexOf(account.account_id) === -1) {
+                    await Account.create({
+                        user: req.user,
+                        accountId: account.account_id,
+                        accountName: account.name,
+                        accountOfficialName: account.official_name,
+                        availableBalance: account.balances.available,
+                        currentBalance: account.balances.current,
+                        subtype: account.subtype,
+                    });
+                }
+            })
+        );
+
+        res.status(201).json({
+            status: 'success',
+            message: 'new account added',
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 exports.getTransactions = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
-    const currTransactions = await Transaction.find({ user: req.user._id });
     const accessTokens = items.map((item) => item.accessToken);
-    const existing_ids = currTransactions.map((t) => t.transactionId);
-    console.log(existing_ids.length);
+
+    const currTransactions = await Transaction.find({ user: req.user._id });
+    const existingIds = currTransactions.map((t) => t.transactionId);
+    // console.log(existing_ids.length);
 
     const request = {
         access_token: accessTokens[0],
@@ -103,10 +145,14 @@ exports.getTransactions = async (req, res, next) => {
 
         await Promise.all(
             transactions.map(async (transaction) => {
-                if (existing_ids.indexOf(transaction.transaction_id) === -1) {
+                const account = await Account.findOne({
+                    accountId: transaction.account_id,
+                });
+                // console.log(account);
+                if (existingIds.indexOf(transaction.transaction_id) === -1) {
                     await Transaction.create({
                         user: req.user,
-                        accountId: transaction.account_id,
+                        account: account,
                         date: transaction.date,
                         authorizedDate: transaction.authorized_date,
                         merchantName: transaction.merchant_name,
