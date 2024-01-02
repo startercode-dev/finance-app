@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 export async function getAccessToken(public_token: string) {
@@ -20,8 +21,11 @@ export async function getAccessToken(public_token: string) {
     const data = await response.json();
 
     if (data.status !== 'success') {
-        console.log(data);
+        return data;
     }
 
-    return data.status;
+    // Revalidates dashboard to by pass router.push bug
+    revalidatePath('/dashboard');
+
+    return { status: data.status };
 }

@@ -84,6 +84,7 @@ export default async function middleware(req: NextRequest) {
                 );
 
                 const { items } = await response.json();
+
                 if (items.length > 0) {
                     return NextResponse.redirect(
                         new URL('/dashboard', req.url),

@@ -1,5 +1,3 @@
-// import { useRouter } from 'next/router';
-// import { useCallback, useEffect } from 'react';
 import { MuseoModerno } from 'next/font/google';
 import { cookies } from 'next/headers';
 import InitBtn from './InitBtn';

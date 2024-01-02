@@ -109,7 +109,6 @@ exports.fetchDashboard = catchAsync(async (req, res, next) => {
     });
 
     //- Fetch 1 month ago transactions
-
     const transactions1mPromise = Transaction.find({
         user: req.user._id,
         date: { $gte: `${date1m}` },
