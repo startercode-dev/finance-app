@@ -3,14 +3,13 @@ import { getUserData } from '@/store/userActions';
 import { useEffect } from 'react';
 
 export default function Dashboard() {
-    const user = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
-
-    // console.log(user);
+    const user = useAppSelector((state) => state.user);
 
     useEffect(() => {
-        dispatch(getUserData());
-        // console.log(user);
+        if (user.id === '') {
+            dispatch(getUserData());
+        }
     }, []);
 
     return (

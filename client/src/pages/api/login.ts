@@ -2,10 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import cookie from 'cookie';
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
+export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         const body = req.body;
         try {
@@ -31,7 +28,7 @@ export default async function handler(
                 'Set-Cookie',
                 cookie.serialize('auth', data.token, {
                     httpOnly: true,
-                    maxAge: 60 * 60 * 24, // in seconds
+                    maxAge: 60 * 60 * process.env.JWT_COOKIE_EXP, // in seconds
                     secure:
                         process.env.NODE_ENV !== 'development' ||
                         req.headers['x-forwarded-proto'] === 'https',
@@ -45,6 +42,7 @@ export default async function handler(
                 data,
             });
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     }

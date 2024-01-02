@@ -163,36 +163,36 @@ exports.protect = catchAsync(async (req, res, next) => {
     next();
 });
 
-exports.isLoggedIn = async (req, res, next) => {
-    if (req.cookies.jwt) {
-        try {
-            // 1) verify token
-            const decoded = await promisify(jwt.verify)(
-                req.cookies.jwt,
-                process.env.JWT_SECRET
-            );
+// exports.isLoggedIn = async (req, res, next) => {
+//     if (req.cookies.jwt) {
+//         try {
+//             // 1) verify token
+//             const decoded = await promisify(jwt.verify)(
+//                 req.cookies.jwt,
+//                 process.env.JWT_SECRET
+//             );
 
-            // 2) Check if user still exists
-            const currUser = await User.findById(decoded.id);
-            if (!currUser) {
-                return next();
-            }
+//             // 2) Check if user still exists
+//             const currUser = await User.findById(decoded.id);
+//             if (!currUser) {
+//                 return next();
+//             }
 
-            // 3) Check if user changed password after the token was issued
-            if (currUser.changedPasswordAfter(decoded.iat)) {
-                return next();
-            }
+//             // 3) Check if user changed password after the token was issued
+//             if (currUser.changedPasswordAfter(decoded.iat)) {
+//                 return next();
+//             }
 
-            // THERE IS A LOGGED IN USER
-            req.user = currUser;
-            res.locals.user = currUser;
-            return next();
-        } catch (err) {
-            return next();
-        }
-    }
-    next();
-};
+//             // THERE IS A LOGGED IN USER
+//             req.user = currUser;
+//             res.locals.user = currUser;
+//             return next();
+//         } catch (err) {
+//             return next();
+//         }
+//     }
+//     next();
+// };
 
 // Restrict role filter
 exports.restrictTo =

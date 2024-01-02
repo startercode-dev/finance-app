@@ -5,8 +5,8 @@ const accountController = require('../controllers/account.controller');
 const router = express.Router();
 
 // router.get('/getall', accountController.getAllUser);
-router.get('/:id', accountController.getMe);
 router.use(authController.protect);
+router.get('/user', accountController.getMe);
 router.patch('/updateMe', accountController.updateMe);
 router.patch('/updateMyPassword', accountController.updateMyPassword);
 

@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import cookie from 'cookie';
 
-export default async function handler(
+export default async function signup(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
