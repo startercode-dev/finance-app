@@ -20,3 +20,22 @@ export const getUserData = () => {
         }
     };
 };
+
+export const getTransactionsData = () => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            const response = await fetch('/api/fetch-transactions');
+
+            if (!response.ok) {
+                throw 'failed to fetch data';
+            }
+
+            const data = await response.json();
+            const transactions = data.transactions;
+
+            dispatch(userActions.setTransactions(transactions));
+        } catch (err) {
+            console.log(err);
+        }
+    };
+};

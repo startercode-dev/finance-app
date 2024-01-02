@@ -1,6 +1,6 @@
 import styles from '@/styles/Dashboard.module.scss';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { getUserData } from '@/store/userActions';
+import { getTransactionsData, getUserData } from '@/store/userActions';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { MuseoModerno } from 'next/font/google';
@@ -13,8 +13,6 @@ export default function Dashboard() {
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.user);
     const router = useRouter();
-    const [transactionsData, setTransactionsData] = useState([]);
-    //! move this to redux
 
     const handleLogout = async () => {
         await fetch('/api/logout');
@@ -61,26 +59,17 @@ export default function Dashboard() {
         }
     };
 
-    const fetchTransactions = async () => {
-        try {
-            const res = await fetch('/api/fetch-transactions', {
-                method: 'GET',
-            });
-            const data = await res.json();
-            const transactions = data.transactions;
-            setTransactionsData(transactions);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     useEffect(() => {
         const init = async () => {
             if (user.name === '') {
-                await dispatch(getUserData());
-                generateToken();
+                try {
+                    await dispatch(getUserData());
+                    dispatch(getTransactionsData());
+                    generateToken();
+                } catch (error) {
+                    console.log(error);
+                }
             }
-            fetchTransactions();
         };
 
         init();
@@ -142,8 +131,8 @@ export default function Dashboard() {
                         <div className={styles.transactions}>
                             <h3>Activities</h3>
                             <div className={styles.container}>
-                                {transactionsData ? (
-                                    transactionsData.map((transaction) => (
+                                {user.transactions ? (
+                                    user.transactions.map((transaction) => (
                                         <div
                                             className={`flex ${styles.transaction}`}
                                         >

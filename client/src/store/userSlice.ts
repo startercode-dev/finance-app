@@ -30,6 +30,10 @@ const userSlice = createSlice({
         setPlaidLinkToken: (state, action) => {
             state.plaidLinkToken = action.payload;
         },
+
+        setTransactions: (state, action) => {
+            state.transactions = action.payload;
+        },
     },
 });
 

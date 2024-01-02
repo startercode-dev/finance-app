@@ -32,6 +32,11 @@ const transactionSchema = new mongoose.Schema(
             trim: true,
         },
 
+        activeCategory: {
+            type: String,
+            trim: true,
+        },
+
         category: {
             type: [String],
             trim: true,
