@@ -16,8 +16,8 @@ export default function Dashboard() {
     const init = async () => {
       try {
         dispatch(getUserData());
-        // dispatch(getAccountsData());
         dispatch(getTransactionsData());
+        // dispatch(getAccountsData());
       } catch (error) {
         console.log(error);
       }

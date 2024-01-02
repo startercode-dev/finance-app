@@ -129,38 +129,40 @@ exports.getTransactions = async (req, res, next) => {
     const promises = accessTokens.map(async (accessToken) => {
         const request = {
             access_token: accessToken,
-            start_date: '2022-01-01', //note: need to be dynamic.
-            end_date: '2024-02-01', //note: need to be dynamic.
+            start_date: '2023-01-01', //note: need to be dynamic.
+            end_date: '2023-12-01', //note: need to be dynamic.
             options: {
                 include_personal_finance_category: true,
             },
         };
         try {
             const response = await client.transactionsGet(request);
-            let data = response.data.transactions;
+            let transaction = response.data.transactions;
             const total_transactions = response.data.total_transactions;
             // console.log(transactions.length);
 
             // PAGINATED REQUEST TO GET ALL AVAILABLE TRANSACTIONS
-            while (data.length < total_transactions) {
+            while (transaction.length < total_transactions) {
                 const paginatedRequest = {
                     access_token: accessToken,
-                    start_date: '2022-01-01',
-                    end_date: '2024-02-01',
+                    start_date: '2023-01-01',
+                    end_date: '2023-12-01',
                     options: {
-                        offset: data.length,
+                        offset: transaction.length,
                         include_personal_finance_category: true,
                     },
                 };
                 const paginatedResponse = await client.transactionsGet(
                     paginatedRequest
                 );
-                data = data.concat(paginatedResponse.data.transactions);
+                transaction = transaction.concat(
+                    paginatedResponse.data.transactions
+                );
                 // console.log(transactions.length);
             }
 
             // RETURN THE DATA
-            return data;
+            return transaction;
         } catch (err) {
             console.log(err);
         }
@@ -169,7 +171,7 @@ exports.getTransactions = async (req, res, next) => {
     try {
         const transactions = await Promise.all(promises);
         const allTransactions = [].concat(...transactions);
-        console.log(allTransactions.length);
+        // console.log(allTransactions[1]);
 
         // SAVE TO DB
         await Promise.all(
@@ -177,6 +179,7 @@ exports.getTransactions = async (req, res, next) => {
                 const account = await Account.findOne({
                     accountId: transaction.account_id,
                 });
+                // Check if transaction already exist
                 if (existingIds.indexOf(transaction.transaction_id) === -1) {
                     await Transaction.create({
                         user: req.user,

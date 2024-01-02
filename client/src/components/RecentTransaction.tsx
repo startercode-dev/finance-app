@@ -7,7 +7,19 @@ import { ArrowsClockwise } from '@phosphor-icons/react';
 export default function RecentTransaction() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
 
+  const filtered = user.transactions.filter((t) => {
+    const transactionDate = new Date(t.date);
+    return (
+      transactionDate.getMonth() === currentMonth &&
+      transactionDate.getFullYear() === currentYear
+    );
+  });
+
+  //* UPDATES DB WITH NEW TRANSACTIONS
   const getTransactions = async () => {
     try {
       await fetch('/api/get-transactions', {
@@ -21,10 +33,6 @@ export default function RecentTransaction() {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    // getTransactions();
-  }, []);
 
   return (
     <div className="card mr-12 mb-12 flex flex-col text-2xl p-8">
@@ -52,7 +60,7 @@ export default function RecentTransaction() {
 
       <ul className="overflow-y-auto">
         {user.transactions && user.transactions.length > 0 ? (
-          user.transactions.slice(10, 30).map((transaction) => {
+          filtered.map((transaction) => {
             return (
               <TransactionItem
                 key={transaction.transactionId}
