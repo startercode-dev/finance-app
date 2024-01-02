@@ -50,11 +50,11 @@ export default function Dashboard() {
     <main>
       <StockBar />
       <Nav />
-      <div className="w-full h-[calc(100vh-153px)] grid grid-cols-38/61">
-        <div className="grid grid-rows-row1 ">
+      <div className="grid-cols-38/61 grid h-[calc(100vh-153px)] w-full">
+        <div className="grid-rows-row1 grid ">
           <MonthlySpending />
-          <div className="card mx-12 mb-12 flex justify-center items-center">
-            <div className="w-[99%] h-full">
+          <div className="card mx-12 mb-12 flex items-center justify-center">
+            <div className="h-full w-[99%]">
               <Doughnut
                 data={{
                   labels: categories,
@@ -103,7 +103,7 @@ export default function Dashboard() {
           <div className="card mx-12 mb-12"></div>
         </div>
 
-        <div className="grid grid-rows-row2 h-[inherit]">
+        <div className="grid-rows-row2 grid h-[inherit]">
           <RecentTransaction />
           <AccountsSummary />
         </div>

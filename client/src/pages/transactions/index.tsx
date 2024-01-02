@@ -38,13 +38,13 @@ export default function Transactions() {
     <>
       <StockBar />
       <Nav />
-      <div className="grid grid-rows-col3 h-[calc(100vh-153px)]">
+      <div className="grid-rows-col3 grid h-[calc(100vh-153px)]">
         <div className="grid grid-cols-4 gap-8 px-[3rem] pb-8">
           {user.accounts.map((account) => {
             return (
               <div
                 key={account.accountId}
-                className="card flex flex-col justify-center text-xl px-8 py-2 "
+                className="card flex flex-col justify-center px-8 py-2 text-xl "
               >
                 <h3>{account.accountName}</h3>
                 <p className="text-primary">${account.currentBalance}</p>
@@ -52,12 +52,12 @@ export default function Transactions() {
             );
           })}
         </div>
-        <div className="card flex flex-col mx-12 mb-12 p-8">
-          <h2 className="text-2xl pb-4">All Transactions</h2>
-          <div className="grid grid-cols-16 pb-4 mx-2 text-secondary">
+        <div className="card mx-12 mb-12 flex flex-col p-8">
+          <h2 className="pb-4 text-2xl">All Transactions</h2>
+          <div className="grid-cols-16 text-secondary mx-2 grid pb-4">
             <p className="col-span-2">Date</p>
             <p className="col-span-7">Name</p>
-            <div className="flex col-span-5">
+            <div className="col-span-5 flex">
               <p className="flex-1"></p>
               <p className="flex-[8]">Category</p>
             </div>

@@ -71,11 +71,11 @@ export default function UserOnboarding() {
   }, []);
 
   return (
-    <div className="pt-[18vh] min-h-screen">
-      <div className="flex flex-col items-center gap-3 bg-white border border-dark w-fit mx-auto p-12 rounded-lg drop-shadow-[6px_6px_0px_#1E0A24]">
-        <h1 className={`${Logo.className} text-6xl text-primary `}>MACRO</h1>
+    <div className="min-h-screen pt-[18vh]">
+      <div className="border-dark mx-auto flex w-fit flex-col items-center gap-3 rounded-lg border bg-white p-12 drop-shadow-[6px_6px_0px_#1E0A24]">
+        <h1 className={`${Logo.className} text-primary text-6xl `}>MACRO</h1>
         <p className="text-lg">Manage your entire portfolio in one system</p>
-        <div className="w-28 h-[1px] bg-neutral-500 my-9 rounded-full"></div>
+        <div className="my-9 h-[1px] w-28 rounded-full bg-neutral-500"></div>
         <h2 className="text-5xl">Welcome!</h2>
         <p className="text-base font-light">
           Let's get started by linking your bank account.
@@ -83,7 +83,7 @@ export default function UserOnboarding() {
         <button
           onClick={() => open()}
           disabled={!ready}
-          className="my-5 text-lg bg-primary text-white px-7 py-2 border border-primary hover:bg-white hover:text-primary disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-600 transition-all rounded-sm"
+          className="bg-primary border-primary hover:text-primary my-5 rounded-sm border px-7 py-2 text-lg text-white transition-all hover:bg-white disabled:border-neutral-300 disabled:bg-neutral-300 disabled:text-neutral-600"
         >
           Connect a bank account
         </button>

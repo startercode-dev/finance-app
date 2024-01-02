@@ -4,17 +4,17 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-sm">
+    <div className="flex min-h-screen flex-col items-center justify-center text-sm">
       <div className="flex gap-5">
         <Link
           href="/login"
-          className="border rounded border-primary px-5 py-1 text-primary hover:bg-primary hover:text-white"
+          className="border-primary text-primary hover:bg-primary rounded border px-5 py-1 hover:text-white"
         >
           Login
         </Link>
         <Link
           href="/signup"
-          className="border rounded border-primary px-5 py-1 text-primary hover:bg-primary hover:text-white"
+          className="border-primary text-primary hover:bg-primary rounded border px-5 py-1 hover:text-white"
         >
           Sign Up
         </Link>

@@ -9,5 +9,5 @@
             }
         }
     ],
-    "pluginSearchDirs": false
+    "plugins": ["prettier-plugin-tailwindcss"]
 }

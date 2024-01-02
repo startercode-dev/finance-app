@@ -37,10 +37,10 @@ export default function Dev() {
   return (
     <>
       <Nav />
-      <div className="flex justify-center items-center gap-5">
+      <div className="flex items-center justify-center gap-5">
         <button
           onClick={handleFireWebhook}
-          className="self-end rounded-md px-7 py-2 border border-dark bg-red-300"
+          className="border-dark self-end rounded-md border bg-red-300 px-7 py-2"
         >
           Fire webhook
         </button>
@@ -51,12 +51,12 @@ export default function Dev() {
             value={inputValue}
             onChange={handleInputChange}
             placeholder="new url...(/server/receive_webhook)"
-            className="border border-dark rounded pl-3 py-2 w-[35rem]"
+            className="border-dark w-[35rem] rounded border py-2 pl-3"
           />
         </div>
         <button
           onClick={handleUpdateWebhookUrl}
-          className="self-end rounded-md px-7 py-2 border border-dark bg-emerald-300"
+          className="border-dark self-end rounded-md border bg-emerald-300 px-7 py-2"
         >
           Update url
         </button>

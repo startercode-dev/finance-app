@@ -78,7 +78,7 @@ export default function Signup() {
 
   return (
     <form onSubmit={handleSignup} className="form">
-      <div className="flex flex-col gap-3 w-80">
+      <div className="flex w-80 flex-col gap-3">
         <input
           className="form-input"
           type="text"
@@ -126,14 +126,14 @@ export default function Signup() {
         {serverErrorMessage && <p>{serverErrorMessage}</p>}
         <button
           type="submit"
-          className="text-primary border border-primary rounded px-4 py-2 hover:bg-primary hover:text-white"
+          className="text-primary border-primary hover:bg-primary rounded border px-4 py-2 hover:text-white"
         >
           Sign Up
         </button>
         <button
           type="button"
           onClick={() => router.push('/')}
-          className="text-primary border border-primary rounded px-4 py-2 hover:bg-primary hover:text-white"
+          className="text-primary border-primary hover:bg-primary rounded border px-4 py-2 hover:text-white"
         >
           Back
         </button>
