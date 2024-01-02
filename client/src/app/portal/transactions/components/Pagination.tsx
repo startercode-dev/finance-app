@@ -19,6 +19,7 @@ export default function Pagination({ data }) {
     for (let i = 1; i <= totalPage; i++) {
       buttons.push(
         <button
+          key={i}
           onClick={() => {
             router.push(
               `/portal/transactions?page=${Number(i)}&limit=${limit}`,

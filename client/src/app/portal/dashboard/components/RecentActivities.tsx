@@ -1,4 +1,4 @@
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import RefreshBtn from './RefreshBtn';
 import TransactionItem from './TransactionItem';
 
 export default async function RecentActivites({ transactions1m }) {
@@ -8,9 +8,7 @@ export default async function RecentActivites({ transactions1m }) {
         <h2 className="font-title text-2xl tracking-wider">
           Recent Activities
         </h2>
-        <div className="group flex h-full cursor-pointer items-center">
-          <ArrowPathIcon className="mt-[0.4rem] w-5 transition-all duration-300 group-hover:rotate-180" />
-        </div>
+        <RefreshBtn />
       </div>
 
       <div className="grid grid-cols-[1fr_5fr_2fr_1fr] border-b border-gray-500 pb-2">

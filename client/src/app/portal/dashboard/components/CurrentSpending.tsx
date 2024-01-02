@@ -20,7 +20,11 @@ export default function CurrentSpending({ data }: Props) {
     <>
       <div className="flex flex-none flex-col gap-3 p-5">
         <h2 className="font-title text-2xl tracking-wider">Current spending</h2>
-        <div className="text-4xl font-medium">${data.currMonthSpending}</div>
+        {data.currMonthSpending ? (
+          <div className="text-4xl font-medium">${data.currMonthSpending}</div>
+        ) : (
+          <div className="text-4xl font-medium">$0</div>
+        )}
         <div className="flex gap-2">
           <Image
             src={renderTriangle()}

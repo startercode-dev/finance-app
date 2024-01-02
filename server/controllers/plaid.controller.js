@@ -158,11 +158,9 @@ exports.getAccounts = async (req, res, next) => {
 exports.getTransactions = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
     const accessTokens = items.map((item) => item.accessToken);
-    // console.log(accessTokens);
 
     const currTransactions = await Transaction.find({ user: req.user._id });
     const existingIds = currTransactions.map((t) => t.transactionId);
-    // console.log(existing_ids.length);
 
     //* CREATE AND ARRAY OF PROMISES FROM ALL THE ACCESS TOKENS
     const promises = accessTokens.map(async (accessToken) => {
