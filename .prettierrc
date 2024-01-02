@@ -3,10 +3,11 @@
     "tabWidth": 4,
     "overrides": [
         {
-            "files": ["*.html"],
+            "files": ["*.html", "*.tsx"],
             "options": {
                 "tabWidth": 2
             }
         }
-    ]
+    ],
+    "pluginSearchDirs": false
 }
