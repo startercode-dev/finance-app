@@ -1,17 +1,17 @@
 import store from '@/store';
-import '@/styles/styles.scss';
-import type { AppProps } from 'next/app';
+import '@/styles/globals.css';
 import { Provider } from 'react-redux';
-import { Red_Hat_Mono } from 'next/font/google';
+import type { AppProps } from 'next/app';
+import { Red_Hat_Display } from 'next/font/google';
 
-const mono = Red_Hat_Mono({ subsets: ['latin'] });
+const sans = Red_Hat_Display({ subsets: ['latin'], variable: '--font-sans' });
 
 export default function App({ Component, pageProps }: AppProps) {
-    return (
-        <Provider store={store}>
-            <main className={mono.className}>
-                <Component {...pageProps} />
-            </main>
-        </Provider>
-    );
+  return (
+    <Provider store={store}>
+      <main className={`${sans.variable} font-sans`}>
+        <Component {...pageProps} />
+      </main>
+    </Provider>
+  );
 }

@@ -8,6 +8,24 @@ export default async function middleware(req: NextRequest) {
         if (token) {
             try {
                 await authenticate(token);
+                const response = await fetch(
+                    `http://localhost:8000/api/v1/item/get`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                const { items } = await response.json();
+                if (items.length === 0) {
+                    return NextResponse.redirect(
+                        new URL('/onboarding', req.url),
+                    );
+                }
+
                 return NextResponse.next();
             } catch (err) {
                 console.log('***INVALID OR EXPIRED TOKEN***', err);
@@ -62,13 +80,13 @@ export default async function middleware(req: NextRequest) {
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
 
                 const { items } = await response.json();
                 if (items.length > 0) {
                     return NextResponse.redirect(
-                        new URL('/dashboard', req.url)
+                        new URL('/dashboard', req.url),
                     );
                 }
 
@@ -77,8 +95,8 @@ export default async function middleware(req: NextRequest) {
                 console.log(err);
                 return NextResponse.next();
             }
+        } else {
+            return NextResponse.redirect(new URL('/', req.url));
         }
-
-        return NextResponse.next();
     }
 }

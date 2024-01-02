@@ -4,7 +4,7 @@ import cookie from 'cookie';
 
 export default async function signup(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse,
 ) {
     if (req.method === 'POST') {
         const body = req.body;
@@ -18,7 +18,7 @@ export default async function signup(
                         'Content-Type': 'application/json',
                     },
                     body: body,
-                }
+                },
             );
             const data = await response.json();
             // console.log(data.error);
@@ -31,14 +31,14 @@ export default async function signup(
                 'Set-Cookie',
                 cookie.serialize('auth', data.token, {
                     httpOnly: true,
-                    maxAge: process.env.JWT_COOKIE_EXP * 60 * 60, // in seconds
+                    maxAge: process.env.JWT_COOKIE_EXP * 24 * 60 * 60, // in seconds
                     secure:
                         process.env.NODE_ENV !== 'development' ||
                         req.headers['x-forwarded-proto'] === 'https',
 
                     sameSite: 'strict',
                     path: '/',
-                })
+                }),
             );
 
             res.status(201).json({

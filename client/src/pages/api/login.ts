@@ -14,7 +14,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                         'Content-Type': 'application/json',
                     },
                     body: body,
-                }
+                },
             );
 
             const data = await response.json();
@@ -28,11 +28,11 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
                 'Set-Cookie',
                 cookie.serialize('auth', data.token, {
                     httpOnly: true,
-                    maxAge: process.env.JWT_COOKIE_EXP * 60 * 60, // in seconds
+                    maxAge: process.env.JWT_COOKIE_EXP * 24 * 60 * 60, // in seconds
                     secure: process.env.NODE_ENV !== 'development',
                     sameSite: 'strict',
                     path: '/',
-                })
+                }),
             );
 
             res.status(201).json({

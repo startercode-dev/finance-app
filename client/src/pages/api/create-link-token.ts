@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function createLinkToken(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse,
 ) {
     if (req.method === 'POST') {
         if (req.cookies.auth) {
@@ -16,7 +16,7 @@ export default async function createLinkToken(
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
 
                 const data = await response.json();
@@ -28,13 +28,8 @@ export default async function createLinkToken(
                 res.status(200).json(data);
             } catch (err) {
                 // console.log(err);
-                res.status(500).json(err);
+                res.status(401).json(err);
             }
         }
     }
-    // else {
-    //     res.status(400).json({
-    //         error: 'invalid request',
-    //     });
-    // }
 }
