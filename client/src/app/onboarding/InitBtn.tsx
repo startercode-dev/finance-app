@@ -47,7 +47,7 @@ export default function InitBtn({ token }) {
             className="my-5 rounded-sm border border-black bg-primary px-7 py-2 text-lg text-black drop-shadow-card transition-all hover:bg-white hover:text-primary disabled:border-neutral-300 disabled:bg-neutral-300 disabled:text-neutral-600"
           >{`Linked!`}</button>
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/portal/dashboard')}
             className="my-5 rounded-sm border border-black bg-primary px-7 py-2 text-lg text-black drop-shadow-card transition-all hover:bg-white hover:text-primary disabled:border-neutral-300 disabled:bg-neutral-300 disabled:text-neutral-600"
           >{`Continue to Dashboard >>`}</button>
         </div>

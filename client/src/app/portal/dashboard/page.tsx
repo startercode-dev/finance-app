@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers';
-import RecentActivites from '@/app/(portal)/dashboard/components/RecentActivities';
-import InitFetchBtn from '@/app/(portal)/dashboard/components/InitFetchBtn';
-import CardBalances from '@/app/(portal)/dashboard/components/CardBalances';
-import TopCategories from '@/app/(portal)/dashboard/components/TopCategories';
-import CurrentSpending from '@/app/(portal)/dashboard/components/CurrentSpending';
+import RecentActivites from '@/app/portal/dashboard/components/RecentActivities';
+import InitFetchBtn from '@/app/portal/dashboard/components/InitFetchBtn';
+import CardBalances from '@/app/portal/dashboard/components/CardBalances';
+import TopCategories from '@/app/portal/dashboard/components/TopCategories';
+import CurrentSpending from '@/app/portal/dashboard/components/CurrentSpending';
 
 async function getUser() {
   const token = cookies().get('auth');
@@ -89,7 +89,7 @@ export default async function DashboardPage() {
 
           <div className="flex h-[100%] w-[30%] flex-col gap-12">
             {/* TOP CATEGORIES */}
-            <div className="from-gradient-green h-[50%] rounded-md border border-black bg-white bg-gradient-to-tr to-gradient-blue drop-shadow-card">
+            <div className="h-[50%] rounded-md border border-black bg-white bg-gradient-to-tr from-gradient-green to-gradient-blue drop-shadow-card">
               <TopCategories categories={topCategories} />
             </div>
 

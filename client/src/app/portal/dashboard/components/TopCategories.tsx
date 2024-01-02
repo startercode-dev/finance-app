@@ -14,7 +14,7 @@ export default async function TopCategories({ categories }: Props) {
 
   return (
     <div className="flex h-full flex-col gap-6 p-5">
-      <h2 className="font-title text-2xl tracking-wider">Top Categories</h2>
+      <h2 className="font-title text-2xl tracking-wider">/Top Categories</h2>
 
       <ul className="overflow-y-scroll">
         {results.map((category) => {

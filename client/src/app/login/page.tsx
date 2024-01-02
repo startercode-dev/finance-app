@@ -38,7 +38,7 @@ export default function LoginPage() {
           throw res;
         }
 
-        router.push('/dashboard');
+        router.push('/portal/dashboard');
       } catch (error) {
         // console.log(error);
         setServerErrorMessage(`${error.msg}`);

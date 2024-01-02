@@ -1,4 +1,4 @@
-import SideNav from '@/app/(portal)/SideNav';
+import SideNav from '@/app/portal/SideNav';
 
 export default async function Layout({
   children,

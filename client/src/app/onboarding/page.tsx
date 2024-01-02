@@ -29,12 +29,12 @@ export default async function UserOnboarding() {
         <h1 className={`${Logo.className} text-6xl text-primary `}>MACRO</h1>
         <p className="text-lg">Manage your entire portfolio in one system</p>
         <div className="my-9 h-[1px] w-28 rounded-full bg-neutral-500"></div>
-        <h2 className="text-5xl">Welcome!</h2>
-        <p className="text-base font-light">
+        <h2 className="font-title text-5xl">Welcome!</h2>
+        <p className="text-base font-extralight">
           Let's get started by linking your bank account.
         </p>
         <InitBtn token={token} />
-        <p className="font-light">
+        <p className="font-extralight">
           * You&#39;re logging in with the bank&#39;s official website via
           Plaid, we do not keep any of your bank&#39;s login credentials !
         </p>

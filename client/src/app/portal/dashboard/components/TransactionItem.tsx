@@ -98,7 +98,7 @@ export default function TransactionItem({ transaction }: Transaction) {
                 <div className="flex flex-1">
                   <XCircleIcon
                     onClick={hideEdit}
-                    className="w-6 cursor-pointer text-[#b64343]"
+                    className="text-red w-6 cursor-pointer"
                   />
                   <button
                     onClick={() =>

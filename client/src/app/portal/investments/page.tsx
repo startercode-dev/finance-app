@@ -5,7 +5,7 @@ export default function InvestmentsPage() {
         <div className="mb-12 flex items-end gap-4">
           <h1 className="font-title text-7xl">Investments</h1>
           <p className="text-2xl leading-none">
-            <span className="font-light">/ cash money</span>
+            <span className="font-light">~/ cashmoney</span>
           </p>
         </div>
       </div>

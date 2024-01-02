@@ -25,7 +25,7 @@ export async function getAccessToken(public_token: string) {
     }
 
     // Revalidates dashboard to by pass router.push bug
-    revalidatePath('/dashboard');
+    revalidatePath('/portal/dashboard');
 
     return { status: data.status };
 }

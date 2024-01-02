@@ -18,9 +18,10 @@ const config: Config = {
                 'gradient-blue': '#87bbd884',
                 'gradient-purple': '#AC99D49a',
                 'gradient-green': '#AAD59A9A',
+                red: '#b64343',
             },
             dropShadow: {
-                card: '5px 5px 0px #1A1A23',
+                card: '6px 6px 0px #1A1A23',
             },
         },
     },

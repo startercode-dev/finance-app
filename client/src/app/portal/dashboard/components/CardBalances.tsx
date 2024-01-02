@@ -13,7 +13,7 @@ interface Props {
 export default async function CardBalances({ accounts }: Props) {
   return (
     <div className="flex h-full w-full flex-col gap-6 p-5">
-      <h2 className="font-title text-2xl tracking-wider">Card balances</h2>
+      <h2 className="font-title text-2xl tracking-wider">/Card balances</h2>
       <div className="flex flex-col gap-8 overflow-y-auto">
         {accounts.map((account) => {
           return (

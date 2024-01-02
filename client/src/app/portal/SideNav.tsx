@@ -10,28 +10,24 @@ import { CogIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { MuseoModerno } from 'next/font/google';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import Image from 'next/image';
-import { handleLogout } from './actions';
 
 const logoFont = MuseoModerno({ subsets: ['latin'] });
 
 const links = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeModernIcon },
+  { name: 'Dashboard', href: '/portal/dashboard', icon: HomeModernIcon },
   {
     name: 'Transactions',
-    href: '/transactions',
+    href: '/portal/transactions',
     icon: ArrowsRightLeftIcon,
   },
-  { name: 'Investments', href: '/investments', icon: BanknotesIcon },
+  { name: 'Investments', href: '/portal/investments', icon: BanknotesIcon },
 ];
 
 export default function SideNav() {
   const pathname = usePathname();
-  const router = useRouter();
-
-  const [isPending, startTransition] = useTransition();
 
   const [open, setOpen] = useState(true);
 
@@ -101,7 +97,7 @@ export default function SideNav() {
                   className={clsx(
                     'flex cursor-pointer items-center gap-3 overflow-hidden rounded border border-black leading-none drop-shadow-card transition-all duration-150 ease-out',
                     {
-                      'bg-light-primary bg-gradient-to-bl from-gradient-purple to-gradient-blue ':
+                      'bg-light-primary bg-gradient-to-bl from-gradient-purple to-gradient-blue':
                         pathname === link.href,
                       'bg-white hover:bg-light-primary': pathname !== link.href,
                     },
@@ -124,18 +120,6 @@ export default function SideNav() {
               );
             })}
           </div>
-
-          <button
-            onClick={() =>
-              startTransition(() => {
-                handleLogout();
-                router.push('/');
-                router.refresh();
-              })
-            }
-          >
-            signout
-          </button>
         </div>
 
         <div
@@ -146,25 +130,32 @@ export default function SideNav() {
         >
           <div
             className={clsx(
-              'flex cursor-default items-center justify-center overflow-hidden rounded border bg-white bg-gradient-to-b from-gradient-purple to-gradient-blue py-1 drop-shadow-card transition-all duration-300 ease-in-out',
+              'flex cursor-default items-center justify-center overflow-hidden rounded border bg-white bg-gradient-to-tl from-[#d4c89976] to-[#87bcd849] drop-shadow-card transition-all duration-300 ease-in-out',
               {
                 'w-0 border-none': !open,
-                ' w-40 border-black': open,
+                'w-40 border-black': open,
               },
             )}
           >
             <Image
-              src="./logo.svg"
+              src="/logo.svg"
               width={20}
               height={20}
-              className="w-44"
+              className="w-36"
               loading="lazy"
               alt={'startercode logo'}
             />
           </div>
-          <div
+          <Link
+            href="/portal/settings"
             className={clsx(
-              'flex shrink-0 cursor-pointer items-center justify-center rounded border border-black bg-white p-1 drop-shadow-card hover:bg-gradient-to-b hover:from-gradient-purple hover:to-gradient-blue',
+              'flex shrink-0 cursor-pointer items-center justify-center rounded border border-black bg-white p-1 drop-shadow-card ',
+              {
+                'bg-gradient-to-bl from-gradient-purple to-gradient-blue':
+                  pathname === '/portal/settings',
+                'hover:bg-gradient-to-bl hover:from-gradient-purple hover:to-gradient-blue':
+                  pathname !== '/portal/settings',
+              },
               {
                 'w-fit': !open,
                 'w-[42px]': open,
@@ -172,7 +163,7 @@ export default function SideNav() {
             )}
           >
             <CogIcon className="w-8" />
-          </div>
+          </Link>
         </div>
       </div>
     </div>
