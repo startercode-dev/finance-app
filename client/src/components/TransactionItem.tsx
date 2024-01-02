@@ -17,9 +17,7 @@ export default function TransactionItem({ transaction }) {
     ...Object.values(transaction.personalCategory),
   ];
 
-  const date = new Date(
-    transaction.authorizedDate ? transaction.authorizedDate : transaction.date,
-  );
+  const date = new Date(transaction.date);
   const formattedDate = date.toLocaleDateString('en-US', {
     timeZone: 'UTC',
     month: '2-digit',

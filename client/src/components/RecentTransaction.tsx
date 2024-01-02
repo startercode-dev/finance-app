@@ -8,26 +8,23 @@ export default function RecentTransaction() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
   const [loading, setLoading] = useState(true);
 
-  const filtered = user.transactions.filter((t) => {
-    const transactionDate = new Date(t.date);
-    return (
-      transactionDate.getMonth() === currentMonth &&
-      transactionDate.getFullYear() === currentYear
-    );
-  });
+  // SORT TRANSACTION ARRAY
+  const sorted = user.transactions
+    .slice()
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  const last15Days = new Date();
-  last15Days.setDate(last15Days.getDate() - 15);
-  const last15DaysTransactions = user.transactions.filter((t) => {
+  // FILTER LAST 30d TRANSACTION
+  const last30Days = new Date();
+  last30Days.setDate(last30Days.getDate() - 30);
+  const last30DaysTransactions = sorted.filter((t) => {
     const transactionDate = new Date(t.date);
-    return transactionDate >= last15Days;
+    return transactionDate >= last30Days;
   });
-  // console.log(last15DaysTransactions);
+  // console.log(last30DaysTransactions);
 
+  // FORMAT DATE xx/xx/xx
   const formatDate = function (date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -38,13 +35,14 @@ export default function RecentTransaction() {
 
   const endDate = formatDate(currentDate);
 
-  //* UPDATES DB WITH NEW TRANSACTIONS
+  // GET 1m ago date
   const getStartDate1m = function () {
     const monthsAgo = currentDate.getMonth() - 1;
     currentDate.setMonth(monthsAgo);
     return currentDate;
   };
 
+  // GET 24m ago date
   const getStartDate24m = function () {
     const monthsAgo = currentDate.getMonth() - 24;
     currentDate.setMonth(monthsAgo);
@@ -112,8 +110,9 @@ export default function RecentTransaction() {
 
     if (user.transactions.length === 0) {
       init();
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
     return () => {};
   }, []);
 
@@ -122,7 +121,7 @@ export default function RecentTransaction() {
       <div className="flex mb-6 items-center gap-6">
         {loading ? (
           <h2>loading</h2>
-        ) : user.transactions && user.transactions.length > 0 ? (
+        ) : user.transactions.length > 0 ? (
           <>
             <h3 className="font-medium">Recent Activities</h3>
             <ArrowsClockwise
@@ -152,9 +151,8 @@ export default function RecentTransaction() {
 
       <ul className="overflow-y-auto">
         {!loading &&
-          user.transactions &&
           user.transactions.length > 0 &&
-          last15DaysTransactions.map((transaction) => {
+          last30DaysTransactions.map((transaction) => {
             return (
               // <Suspense fallback={<h2>loading...</h2>}>
               <TransactionItem

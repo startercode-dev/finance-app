@@ -4,6 +4,7 @@ import MonthlySpending from '@/components/MonthlySpending';
 import Nav from '@/components/Nav';
 import 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
+import AccountsSummary from '@/components/AccountsSummary';
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
@@ -163,13 +164,7 @@ export default function Dashboard() {
 
         <div className="grid grid-rows-col2 h-[inherit]">
           <RecentTransaction />
-
-          {/* //* STOCK */}
-          <div className="grid grid-cols-3 mr-12 mb-12 gap-x-12">
-            <div className="card"></div>
-            <div className="card"></div>
-            <div className="card"></div>
-          </div>
+          <AccountsSummary />
         </div>
       </div>
     </main>
