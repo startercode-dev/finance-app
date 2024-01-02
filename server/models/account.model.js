@@ -37,6 +37,12 @@ const accountSchema = new mongoose.Schema(
             ref: 'User',
             required: [true, 'must belong to a user'],
         },
+
+        item: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Item',
+            required: [true, 'must belong to an item'],
+        },
     },
     {
         toJSON: { virtuals: true },

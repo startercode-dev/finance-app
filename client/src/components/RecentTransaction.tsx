@@ -22,8 +22,6 @@ export default function RecentTransaction() {
     }
   };
 
-  console.log(user.transactions || 10);
-
   useEffect(() => {
     // getTransactions();
   }, []);
@@ -31,12 +29,25 @@ export default function RecentTransaction() {
   return (
     <div className="card mr-12 mb-12 flex flex-col text-2xl p-8">
       <div className="flex mb-6 items-center gap-6">
-        <h3 className="font-medium">Recent Activities</h3>
-        <ArrowsClockwise
-          size={22}
-          className="cursor-pointer text-secondary hover:rotate-180 transition-all duration-300"
-          onClick={getTransactions}
-        />
+        {user.transactions && user.transactions.length > 0 ? (
+          <>
+            <h3 className="font-medium">Recent Activities</h3>
+            <ArrowsClockwise
+              size={22}
+              className="cursor-pointer text-secondary hover:rotate-180 transition-all duration-300"
+              onClick={getTransactions}
+            />
+          </>
+        ) : (
+          <div>
+            <h3 className="font-medium text-3xl mb-1">
+              Welcome to your dashboard!
+            </h3>
+            <p className="text-xl font-light">
+              Let&#39;s get started by syncing up all your transactions.
+            </p>
+          </div>
+        )}
       </div>
 
       <ul className="overflow-y-auto">
@@ -50,14 +61,12 @@ export default function RecentTransaction() {
             );
           })
         ) : (
-          <>
-            <button
-              onClick={getTransactions}
-              className="border border-primary bg-primary text-white rounded-md text-base px-5 py-2 hover:text-primary hover:bg-white"
-            >
-              Sync transactions!
-            </button>
-          </>
+          <button
+            onClick={getTransactions}
+            className="border border-primary bg-primary text-lg text-white rounded-md px-8 py-2 hover:text-primary hover:bg-white transition-all"
+          >
+            Sync transactions !
+          </button>
         )}
       </ul>
     </div>

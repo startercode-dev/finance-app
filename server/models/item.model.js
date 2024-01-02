@@ -17,6 +17,11 @@ const itemSchema = new mongoose.Schema(
             ref: 'User',
             required: [true, 'must belong to a user'],
         },
+
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
     },
     {
         toJSON: { virtuals: true },

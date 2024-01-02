@@ -15,6 +15,7 @@ const configuration = new Configuration({
 });
 const client = new PlaidApi(configuration);
 
+//* GET PLAID LINK TOKEN
 exports.getLinkToken = async (req, res, next) => {
     const clientUserId = req.user.id;
     const request = {
@@ -41,6 +42,7 @@ exports.getLinkToken = async (req, res, next) => {
     }
 };
 
+//* GET ACCESS TOKEN FROM PLAID
 exports.getAccessToken = async (req, res, next) => {
     const publicToken = req.body.public_token;
 
@@ -67,15 +69,20 @@ exports.getAccessToken = async (req, res, next) => {
     }
 };
 
+//* GET ACCOUNTS FOR NEW PLAID ITEMS
 exports.getAccounts = async (req, res, next) => {
-    const items = await Item.find({ user: req.user._id });
-    const accessTokens = items.map((item) => item.accessToken);
+    // const items = await Item.find({ user: req.user._id });
+    const items = await Item.find({ user: req.user._id })
+        .sort({ createdAt: -1 }) // Sort by createdAt field in descending order (newest first)
+        .limit(1);
+    const accessTokens = items[0].accessToken;
+    console.log(items);
 
     const currAccounts = await Account.find({ user: req.user._id });
     const existingAccounts = currAccounts.map((t) => t.accountId);
 
     const request = {
-        access_token: accessTokens[0],
+        access_token: accessTokens,
     };
 
     try {
@@ -87,6 +94,7 @@ exports.getAccounts = async (req, res, next) => {
                 if (existingAccounts.indexOf(account.account_id) === -1) {
                     await Account.create({
                         user: req.user,
+                        item: items[0],
                         accountId: account.account_id,
                         accountName: account.name,
                         accountOfficialName: account.official_name,
@@ -107,6 +115,7 @@ exports.getAccounts = async (req, res, next) => {
     }
 };
 
+//* GET TRANSACTIONS
 exports.getTransactions = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
     const accessTokens = items.map((item) => item.accessToken);
@@ -116,40 +125,55 @@ exports.getTransactions = async (req, res, next) => {
     const existingIds = currTransactions.map((t) => t.transactionId);
     // console.log(existing_ids.length);
 
-    const request = {
-        access_token: accessTokens[0],
-        start_date: '2022-01-01', //note: need to be dynamic.
-        end_date: '2024-02-01', //note: need to be dynamic.
-        options: {
-            include_personal_finance_category: true,
-        },
-    };
-    try {
-        const response = await client.transactionsGet(request);
-        // console.log(response.data.total_transactions);
-        let transactions = response.data.transactions;
-        const total_transactions = response.data.total_transactions;
+    //* CREATE AND ARRAY OF PROMISES FROM ALL THE ACCESS TOKENS
+    const promises = accessTokens.map(async (accessToken) => {
+        const request = {
+            access_token: accessToken,
+            start_date: '2022-01-01', //note: need to be dynamic.
+            end_date: '2024-02-01', //note: need to be dynamic.
+            options: {
+                include_personal_finance_category: true,
+            },
+        };
+        try {
+            const response = await client.transactionsGet(request);
+            let data = response.data.transactions;
+            const total_transactions = response.data.total_transactions;
+            // console.log(transactions.length);
 
-        while (transactions.length < total_transactions) {
-            const paginatedRequest = {
-                access_token: accessTokens[0],
-                start_date: '2022-01-01',
-                end_date: '2024-02-01',
-                options: {
-                    offset: transactions.length,
-                    include_personal_finance_category: true,
-                },
-            };
-            const paginatedResponse = await client.transactionsGet(
-                paginatedRequest
-            );
-            transactions = transactions.concat(
-                paginatedResponse.data.transactions
-            );
+            // PAGINATED REQUEST TO GET ALL AVAILABLE TRANSACTIONS
+            while (data.length < total_transactions) {
+                const paginatedRequest = {
+                    access_token: accessToken,
+                    start_date: '2022-01-01',
+                    end_date: '2024-02-01',
+                    options: {
+                        offset: data.length,
+                        include_personal_finance_category: true,
+                    },
+                };
+                const paginatedResponse = await client.transactionsGet(
+                    paginatedRequest
+                );
+                data = data.concat(paginatedResponse.data.transactions);
+                // console.log(transactions.length);
+            }
+
+            // RETURN THE DATA
+            return data;
+        } catch (err) {
+            console.log(err);
         }
+    });
 
+    try {
+        const transactions = await Promise.all(promises);
+        const allTransactions = [].concat(...transactions);
+        console.log(allTransactions.length);
+
+        // SAVE TO DB
         await Promise.all(
-            transactions.map(async (transaction) => {
+            allTransactions.map(async (transaction) => {
                 const account = await Account.findOne({
                     accountId: transaction.account_id,
                 });

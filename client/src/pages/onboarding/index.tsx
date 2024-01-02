@@ -82,13 +82,13 @@ export default function UserOnboarding() {
       <button
         onClick={() => open()}
         disabled={!ready}
-        className="my-5 text-lg bg-primary text-white px-7 py-2 border border-primary hover:bg-white hover:text-primary disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-600 transition-all"
+        className="my-5 text-lg bg-primary text-white px-7 py-2 border border-primary hover:bg-white hover:text-primary disabled:bg-neutral-300 disabled:border-neutral-300 disabled:text-neutral-600 transition-all rounded-lg"
       >
         Connect a bank account
       </button>
       <p className="font-light">
         * You&#39;re logging in with the bank&#39;s official website via Plaid,
-        we do not keep any of your bank&#39;s login credentials
+        we do not keep any of your bank&#39;s login credentials !
       </p>
     </div>
   );
