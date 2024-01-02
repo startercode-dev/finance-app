@@ -19,6 +19,4 @@ export default function Dashboard() {
             <h2>{user.id}</h2>
         </>
     );
-
-    //! nodejs nextjs jwt on youtube
 }

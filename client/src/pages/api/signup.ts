@@ -31,7 +31,7 @@ export default async function signup(
                 'Set-Cookie',
                 cookie.serialize('auth', data.token, {
                     httpOnly: true,
-                    maxAge: 60 * 60 * 24, // in seconds
+                    maxAge: 60 * 60 * process.env.JWT_COOKIE_EXP, // in seconds
                     secure:
                         process.env.NODE_ENV !== 'development' ||
                         req.headers['x-forwarded-proto'] === 'https',
@@ -45,6 +45,7 @@ export default async function signup(
                 message: 'success',
             });
         } catch (err) {
+            // console.log(err);
             res.status(500).json(err);
         }
     }

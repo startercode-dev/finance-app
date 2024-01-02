@@ -39,10 +39,10 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             );
 
             res.status(201).json({
-                data,
+                message: 'success',
             });
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             res.status(500).json(err);
         }
     }

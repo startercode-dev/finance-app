@@ -41,19 +41,17 @@ export default function LoginForm() {
                     }),
                 });
 
-                const { data } = await res.json();
-                const user = data.user;
-                // console.log(user);
-                dispatch(userActions.setUser(user));
+                const data = await res.json();
+                // console.log(data);
 
                 if (data.status === 'failed') {
-                    setServerErrorMessage(data.msg);
-                    return;
+                    throw data.msg;
                 }
 
                 router.push('/dashboard');
             } catch (err) {
-                setServerErrorMessage('error');
+                // console.log(err);
+                setServerErrorMessage(`${err}`);
             }
         }
     };
@@ -83,7 +81,7 @@ export default function LoginForm() {
 
                 {serverErrorMessage && <p>{serverErrorMessage}</p>}
                 <button type="submit">Login</button>
-                <button type="button" onClick={() => router.back()}>
+                <button type="button" onClick={() => router.push('/')}>
                     Back
                 </button>
             </div>

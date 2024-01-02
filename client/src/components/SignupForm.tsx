@@ -50,24 +50,30 @@ export default function SignupForm() {
             passwordIsValid &&
             passwordConfirmIsValid
         ) {
-            const res = await fetch('/api/signup', {
-                method: 'POST',
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password,
-                    passwordConfirm,
-                }),
-            });
+            try {
+                const res = await fetch('/api/signup', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        passwordConfirm,
+                    }),
+                });
 
-            const data = await res.json();
+                const data = await res.json();
+                // console.log(data);
 
-            if (data.code === 11000) {
-                setServerErrorMessage('user already exists');
-                return;
+                if (data.code === 11000) {
+                    throw 'user already exists';
+                }
+                //note Need to handle other errors such as server/network
+
+                router.push('/dashboard');
+            } catch (err) {
+                // console.log(err);
+                setServerErrorMessage(`${err}`);
             }
-
-            router.push('/');
         }
     };
 
@@ -116,7 +122,7 @@ export default function SignupForm() {
 
                 {serverErrorMessage && <p>{serverErrorMessage}</p>}
                 <button type="submit">Sign Up</button>
-                <button type="button" onClick={() => router.back()}>
+                <button type="button" onClick={() => router.push('/')}>
                     Back
                 </button>
             </div>
