@@ -54,6 +54,7 @@ export default async function TransactionsPage({ searchParams }) {
                   <TransactionItem
                     key={transaction.transactionId}
                     transaction={transaction}
+                    showYear={true}
                   />
                 );
               })}

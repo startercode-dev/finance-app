@@ -1,7 +1,24 @@
+import { cookies } from 'next/headers';
 import LogoutBtn from './components/LogoutBtn';
 import UserForm from './components/UserForm';
 
-export default function SettingsPage() {
+async function getUser() {
+  const token = cookies().get('auth');
+
+  const res = await fetch('http://localhost:8000/api/v1/user/info', {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token?.value}`,
+    },
+    cache: 'no-store',
+  });
+  const { data } = await res.json();
+  return data;
+}
+
+export default async function SettingsPage() {
+  const userData = await getUser();
+
   return (
     <div className="h-full w-full cursor-default overflow-y-scroll p-12">
       <div className="m-auto max-w-[1600px]">
@@ -16,7 +33,7 @@ export default function SettingsPage() {
           <LogoutBtn />
         </div>
 
-        <UserForm />
+        <UserForm userData={userData} />
       </div>
     </div>
   );

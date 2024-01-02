@@ -4,7 +4,6 @@ import InitFetchBtn from '@/app/portal/dashboard/components/InitFetchBtn';
 import CardBalances from '@/app/portal/dashboard/components/CardBalances';
 import TopCategories from '@/app/portal/dashboard/components/TopCategories';
 import CurrentSpending from '@/app/portal/dashboard/components/CurrentSpending';
-import { initFetch } from './actions';
 
 async function getUser() {
   const token = cookies().get('auth');

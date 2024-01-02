@@ -10,19 +10,23 @@ import { useState, useTransition } from 'react';
 import { updateActiveCategory } from '../actions';
 
 interface Transaction {
-  transaction: {
-    transactionId: string;
-    activeCategory: string;
-    date: string;
-    category: string[];
-    merchantLogoUrl: string;
-    transactionName: string;
-    account: { id: string; accountOfficialName: string };
-    amount: number;
-  };
+  transactionId: string;
+  activeCategory: string;
+  date: string;
+  category: string[];
+  merchantLogoUrl: string;
+  transactionName: string;
+  account: { id: string; accountOfficialName: string };
+  amount: number;
 }
 
-export default function TransactionItem({ transaction }: Transaction) {
+export default function TransactionItem({
+  transaction,
+  showYear,
+}: {
+  transaction: Transaction;
+  showYear: boolean;
+}) {
   const [editMode, setEditMode] = useState(false);
   const [selectedOption, setSelectedOption] = useState(
     transaction.activeCategory,
@@ -39,11 +43,21 @@ export default function TransactionItem({ transaction }: Transaction) {
   };
 
   const date = new Date(transaction.date);
-  const formattedDate = date.toLocaleDateString('en-US', {
-    timeZone: 'UTC',
-    month: 'numeric',
-    day: 'numeric',
-  });
+  let formattedDate;
+  if (showYear) {
+    formattedDate = date.toLocaleDateString('en-US', {
+      timeZone: 'UTC',
+      year: '2-digit',
+      month: 'numeric',
+      day: 'numeric',
+    });
+  } else {
+    formattedDate = date.toLocaleDateString('en-US', {
+      timeZone: 'UTC',
+      month: 'numeric',
+      day: 'numeric',
+    });
+  }
 
   const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
@@ -59,7 +73,7 @@ export default function TransactionItem({ transaction }: Transaction) {
         {transaction.merchantLogoUrl ? (
           <img
             src={transaction.merchantLogoUrl}
-            alt=""
+            alt="merchant logo"
             className="h-10 w-10 rounded"
           />
         ) : (
@@ -98,7 +112,7 @@ export default function TransactionItem({ transaction }: Transaction) {
                 <div className="flex flex-1">
                   <XCircleIcon
                     onClick={hideEdit}
-                    className="text-red w-6 cursor-pointer"
+                    className="w-6 cursor-pointer text-red"
                   />
                   <button
                     onClick={() =>

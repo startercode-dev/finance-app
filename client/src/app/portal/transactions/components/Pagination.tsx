@@ -14,7 +14,7 @@ export default function Pagination({ data }) {
   // console.log(data.currentPage === totalPage - 2);
 
   return (
-    <div className="mt-12 flex w-full justify-center gap-6">
+    <div className="mt-12 flex w-full justify-center gap-8">
       <button
         onClick={() => {
           router.push(
@@ -22,7 +22,7 @@ export default function Pagination({ data }) {
           );
         }}
         className={clsx(
-          'h-10 w-28 rounded border border-black bg-background opacity-100 drop-shadow-card',
+          'h-10 w-24 rounded border border-black bg-background opacity-100 drop-shadow-card',
           {
             '!opacity-30': data.currentPage < 2,
           },
@@ -198,7 +198,7 @@ export default function Pagination({ data }) {
           );
         }}
         className={clsx(
-          'h-10 w-28 rounded border border-black bg-background opacity-100 drop-shadow-card',
+          'h-10 w-24 rounded border border-black bg-background opacity-100 drop-shadow-card',
           {
             '!opacity-30': data.currentPage >= totalPage,
           },

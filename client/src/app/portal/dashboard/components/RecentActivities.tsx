@@ -26,6 +26,7 @@ export default async function RecentActivites({ transactions1m }) {
             <TransactionItem
               key={transaction.transactionId}
               transaction={transaction}
+              showYear={false}
             />
           );
         })}

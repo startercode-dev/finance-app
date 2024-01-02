@@ -3,8 +3,9 @@
 import useInput from '@/hooks/useInput';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { UpdateMe } from '../actions';
 
-export default function UserForm() {
+export default function UserForm({ userData }) {
   const router = useRouter();
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
@@ -12,19 +13,18 @@ export default function UserForm() {
 
   const {
     value: name,
-    hasError: nameHasError,
     isValid: nameIsValid,
     onChange: nameOnChange,
-    onBlur: nameOnBlur,
-  } = useInput((value) => value.trim() !== '');
+  } = useInput((value) => value.trim() !== '', userData.name);
 
   const {
     value: email,
-    hasError: emailHasError,
     isValid: emailIsValid,
     onChange: emailOnChange,
-    onBlur: emailOnBlur,
-  } = useInput((value) => value.trim() !== '' && emailRegex.test(value));
+  } = useInput(
+    (value) => value.trim() !== '' && emailRegex.test(value),
+    userData.email,
+  );
 
   const {
     value: password,
@@ -46,53 +46,63 @@ export default function UserForm() {
     e.preventDefault();
 
     setServerErrorMessage('');
-    if (
-      nameIsValid &&
-      emailIsValid &&
-      passwordIsValid &&
-      passwordConfirmIsValid
-    ) {
-      try {
-      } catch (error) {
-        // console.log(error);
+    if (!nameIsValid) {
+      setServerErrorMessage('please enter a valid name');
+      return;
+    }
+
+    if (!emailIsValid) {
+      setServerErrorMessage('please enter a valid email');
+      return;
+    }
+
+    try {
+      const res = await UpdateMe(name, email);
+      if (res.status !== 'success') {
+        throw res;
+      }
+      setServerErrorMessage('updated!');
+    } catch (error) {
+      if (error.errorObj.code === 11000) {
+        setServerErrorMessage(`! user already exists`);
+      } else {
+        setServerErrorMessage(error.msg);
       }
     }
   };
 
   return (
     <div className="mb-12 flex flex-col gap-4">
-      <form className="w-2/5" onClick={handleUpdate}>
+      <form className="w-2/5" onSubmit={handleUpdate}>
         <div className="mb-6 flex flex-col">
           <label className="">Name</label>
           <input
-            className="rounded border border-black bg-white px-4 py-2 drop-shadow-card focus:outline-none"
+            className="rounded border border-black bg-white px-4 py-2 drop-shadow-card placeholder:text-black placeholder:opacity-50 focus:outline-none"
             type="text"
             name="name"
-            placeholder="name"
+            placeholder={userData.name}
             value={name}
             onChange={nameOnChange}
-            onBlur={nameOnBlur}
           />
-          {nameHasError && <p>! can't be empty</p>}
         </div>
 
         <div className="mb-10 flex flex-col">
           <label className="">Email</label>
           <input
-            className="rounded border border-black bg-white px-4 py-2 drop-shadow-card focus:outline-none"
+            className="rounded border border-black bg-white px-4 py-2 drop-shadow-card placeholder:text-black placeholder:opacity-50 focus:outline-none"
             type="email"
             name="email"
-            placeholder="email"
+            placeholder={userData.email}
             value={email}
             onChange={emailOnChange}
-            onBlur={emailOnBlur}
           />
-          {emailHasError && <p>! need to be valid email</p>}
         </div>
 
+        {serverErrorMessage && <p className="my-4">{serverErrorMessage}</p>}
         <button
+          disabled={name === userData.name && email === userData.email}
           type="submit"
-          className="rounded border border-black bg-primary px-4 py-2 drop-shadow-card focus:outline-none"
+          className="rounded border border-black bg-primary px-4 py-2 drop-shadow-card focus:outline-none disabled:opacity-50"
         >
           Update profile
         </button>
