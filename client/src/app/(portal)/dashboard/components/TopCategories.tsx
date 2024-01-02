@@ -3,6 +3,7 @@ interface Props {
     {
       _id: string;
       total: number;
+      iconUrl: string;
     },
   ];
 }
@@ -12,22 +13,27 @@ export default async function TopCategories({ categories }: Props) {
   const results = categories.slice(0, 5);
 
   return (
-    <div className="flex flex-col gap-4 p-5">
-      <h2 className="text-2xl">Top Categories</h2>
+    <div className="flex h-full flex-col gap-6 p-5">
+      <h2 className="font-title text-2xl tracking-wider">Top Categories</h2>
 
-      <ul className="overflow-y-auto">
+      <ul className="overflow-y-scroll">
         {results.map((category) => {
-          // console.log(category._id);
           return (
             <li
-              className="mb-6 flex items-center justify-between"
+              className="mb-6 flex items-center justify-between last:mb-0"
               key={category._id}
             >
               <div className="flex items-center gap-5">
-                <div className="h-8 w-8 rounded-full bg-green-800"></div>
+                <div className="h-8 w-8">
+                  <img
+                    src={category.iconUrl}
+                    alt=""
+                    className="mix-blend-darken"
+                  />
+                </div>
                 <p>{category._id}</p>
               </div>
-              <p>${category.total}</p>
+              <p className="font-semibold">${category.total}</p>
             </li>
           );
         })}

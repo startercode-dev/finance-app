@@ -8,6 +8,7 @@ const {
 const Item = require('../models/item.model');
 const Account = require('../models/account.model');
 const Transaction = require('../models/transaction.model');
+const { toTitleCase, removePrefix } = require('../utils/helpers');
 
 const configuration = new Configuration({
     basePath: PlaidEnvironments[process.env.PLAID_ENV],
@@ -226,6 +227,22 @@ exports.getTransactions = async (req, res, next) => {
                 const account = await Account.findOne({
                     accountId: transaction.account_id,
                 });
+
+                // format and combine Plaid Categories
+                const { category } = transaction;
+                const { primary } = transaction.personal_finance_category;
+                const { detailed } = transaction.personal_finance_category;
+
+                const formattedPrimary = toTitleCase(
+                    primary.split('_').join(' '),
+                );
+                const formattedDetail = toTitleCase(
+                    removePrefix(detailed, primary),
+                );
+                const plaidCategories = Array.from(
+                    new Set([...category, formattedPrimary, formattedDetail]),
+                );
+
                 // Check if transaction already exist
                 if (existingIds.indexOf(transaction.transaction_id) === -1) {
                     await Transaction.create({
@@ -234,12 +251,13 @@ exports.getTransactions = async (req, res, next) => {
                         date: transaction.date,
                         authorizedDate: transaction.authorized_date,
                         merchantName: transaction.merchant_name,
+                        merchantLogoUrl: transaction.logo_url,
                         transactionName: transaction.name,
                         amount: transaction.amount,
-                        activeCategory:
-                            transaction.personal_finance_category.primary,
-                        category: transaction.category,
-                        personalCategory: transaction.personal_finance_category,
+                        activeCategory: formattedPrimary,
+                        category: plaidCategories,
+                        plaidCategoryIconUrl:
+                            transaction.personal_finance_category_icon_url,
                         transactionId: transaction.transaction_id,
                         pending: transaction.pending,
                     });

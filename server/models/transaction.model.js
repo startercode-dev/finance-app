@@ -18,6 +18,11 @@ const transactionSchema = new mongoose.Schema(
             trim: true,
         },
 
+        merchantLogoUrl: {
+            type: String,
+            trim: true,
+        },
+
         transactionName: {
             type: String,
             trim: true,
@@ -38,8 +43,13 @@ const transactionSchema = new mongoose.Schema(
             trim: true,
         },
 
-        personalCategory: {
+        plaidCategory: {
             type: {},
+            trim: true,
+        },
+
+        plaidCategoryIconUrl: {
+            type: String,
             trim: true,
         },
 

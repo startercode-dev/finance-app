@@ -12,9 +12,9 @@ interface Props {
 
 export default async function CardBalances({ accounts }: Props) {
   return (
-    <div className="flex h-[inherit] w-full flex-col gap-4 p-5">
-      <h2 className="text-2xl">Card balances</h2>
-      <div className="flex flex-col gap-6 overflow-y-auto">
+    <div className="flex h-full w-full flex-col gap-6 p-5">
+      <h2 className="font-title text-2xl tracking-wider">Card balances</h2>
+      <div className="flex flex-col gap-8 overflow-y-auto">
         {accounts.map((account) => {
           return (
             <div key={account.id} className="flex items-center justify-between">
@@ -26,9 +26,9 @@ export default async function CardBalances({ accounts }: Props) {
                   alt={'triangle up icon'}
                   className="w-12 rounded"
                 />
-                <p className="text-lg">{account.accountName}</p>
+                <p className="">{account.accountName}</p>
               </div>
-              <p className="text-xl font-medium">${account.currentBalance}</p>
+              <p className="font-semibold">${account.currentBalance}</p>
             </div>
           );
         })}

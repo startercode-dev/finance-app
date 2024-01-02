@@ -1,35 +1,7 @@
 const Transaction = require('../models/transaction.model');
 const Account = require('../models/account.model');
 const catchAsync = require('../utils/catch-async');
-
-async function getMonthlySpending(id, year, month) {
-    // Check if transactions exist
-    const results = await Transaction.find({ user: id });
-
-    if (results.length > 0) {
-        const data = await Transaction.aggregate([
-            {
-                $match: {
-                    date: {
-                        $gte: `${year}-${month}-01`,
-                        $lte: `${year}-${month}-31`,
-                    },
-                },
-            },
-            {
-                $group: {
-                    _id: null,
-                    sumSpending: { $sum: '$amount' },
-                },
-            },
-        ]);
-
-        return data;
-    }
-
-    // Return empty array if no transactions
-    return results;
-}
+const { getMonthlySpending } = require('../utils/helpers');
 
 exports.fetchTransactions = catchAsync(async (req, res, next) => {
     // Adding user to the query & exclude certain fields
@@ -130,6 +102,7 @@ exports.fetchDashboard = catchAsync(async (req, res, next) => {
                 _id: '$activeCategory',
                 total: { $sum: '$amount' },
                 count: { $sum: 1 },
+                iconUrl: { $first: '$plaidCategoryIconUrl' },
             },
         },
         {

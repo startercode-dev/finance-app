@@ -5,7 +5,6 @@ import {
   BanknotesIcon,
   ChevronDoubleLeftIcon,
   HomeModernIcon,
-  UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { CogIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
@@ -13,6 +12,7 @@ import { MuseoModerno } from 'next/font/google';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
+import Image from 'next/image';
 import { handleLogout } from './actions';
 
 const logoFont = MuseoModerno({ subsets: ['latin'] });
@@ -27,7 +27,7 @@ const links = [
   { name: 'Investments', href: '/investments', icon: BanknotesIcon },
 ];
 
-export default function SideNav({ user }) {
+export default function SideNav() {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -81,7 +81,7 @@ export default function SideNav({ user }) {
         >
           <h1
             className={clsx(
-              `${logoFont.className} h-auto cursor-default rounded border border-black bg-light-primary bg-gradient-to-t from-gradient-purple to-gradient-blue text-center text-xl font-medium leading-tight drop-shadow-card transition-all duration-500 ease-out`,
+              `${logoFont.className} h-auto cursor-default rounded border border-black bg-primary text-center text-xl font-medium leading-tight drop-shadow-card transition-all duration-500 ease-out`,
               {
                 'w-12 p-2': !open,
                 'w-40 px-8 py-2': open,
@@ -99,9 +99,10 @@ export default function SideNav({ user }) {
                   key={link.name}
                   href={link.href}
                   className={clsx(
-                    'flex cursor-pointer items-center gap-3 overflow-hidden rounded border border-black leading-none drop-shadow-card transition-all delay-100 duration-150 ease-out',
+                    'flex cursor-pointer items-center gap-3 overflow-hidden rounded border border-black leading-none drop-shadow-card transition-all duration-150 ease-out',
                     {
-                      'bg-primary': pathname === link.href,
+                      'bg-light-primary bg-gradient-to-bl from-gradient-purple to-gradient-blue ':
+                        pathname === link.href,
                       'bg-white hover:bg-light-primary': pathname !== link.href,
                     },
                     {
@@ -145,15 +146,21 @@ export default function SideNav({ user }) {
         >
           <div
             className={clsx(
-              'flex cursor-default items-center justify-center gap-4 overflow-hidden rounded border bg-white bg-gradient-to-b from-gradient-purple to-gradient-blue py-1 drop-shadow-card transition-all duration-300 ease-in-out',
+              'flex cursor-default items-center justify-center overflow-hidden rounded border bg-white bg-gradient-to-b from-gradient-purple to-gradient-blue py-1 drop-shadow-card transition-all duration-300 ease-in-out',
               {
                 'w-0 border-none': !open,
                 ' w-40 border-black': open,
               },
             )}
           >
-            <UserCircleIcon className="w-8" />
-            <p className="text-lg">{user.name}</p>
+            <Image
+              src="./logo.svg"
+              width={20}
+              height={20}
+              className="w-44"
+              loading="lazy"
+              alt={'startercode logo'}
+            />
           </div>
           <div
             className={clsx(

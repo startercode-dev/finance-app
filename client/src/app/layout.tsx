@@ -1,9 +1,16 @@
 import type { Metadata } from 'next';
-import { Red_Hat_Display, Red_Hat_Mono } from 'next/font/google';
+import { Notable, Gantari } from 'next/font/google';
 import './globals.css';
 
-const sans = Red_Hat_Display({ subsets: ['latin'], variable: '--font-sans' });
-const mono = Red_Hat_Mono({ subsets: ['latin'], variable: '--font-mono' });
+const sans = Gantari({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
+const title = Notable({
+  subsets: ['latin'],
+  variable: '--font-title',
+  weight: ['400'],
+});
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${sans.variable} ${mono.variable} bg-white font-sans`}>
+      <body className={`${sans.variable} ${title.variable} bg-white font-sans`}>
         {children}
       </body>
     </html>

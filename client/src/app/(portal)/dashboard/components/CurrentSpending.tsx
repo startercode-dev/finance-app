@@ -19,7 +19,7 @@ export default function CurrentSpending({ data }: Props) {
   return (
     <>
       <div className="flex flex-none flex-col gap-3 p-5">
-        <h2 className="text-2xl">Current spending</h2>
+        <h2 className="font-title text-2xl tracking-wider">Current spending</h2>
         <div className="text-4xl font-medium">${data.currMonthSpending}</div>
         <div className="flex gap-2">
           <Image

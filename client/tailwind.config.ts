@@ -6,7 +6,7 @@ const config: Config = {
         extend: {
             fontFamily: {
                 sans: ['var(--font-sans)'],
-                mono: ['var(--font-mono)'],
+                title: ['var(--font-title)'],
             },
             colors: {
                 background: '#E5E5DC',
@@ -17,6 +17,7 @@ const config: Config = {
                 'light-primary': '#C4ECB1',
                 'gradient-blue': '#87bbd884',
                 'gradient-purple': '#AC99D49a',
+                'gradient-green': '#AAD59A9A',
             },
             dropShadow: {
                 card: '5px 5px 0px #1A1A23',

@@ -4,6 +4,7 @@ import {
   PencilSquareIcon,
   XCircleIcon,
   CheckCircleIcon,
+  ArrowUpRightIcon,
 } from '@heroicons/react/24/outline';
 import { useState, useTransition } from 'react';
 import { updateActiveCategory } from '../actions';
@@ -14,7 +15,7 @@ interface Transaction {
     activeCategory: string;
     date: string;
     category: string[];
-    personalCategory: { primary: string; detailed: string };
+    merchantLogoUrl: string;
     transactionName: string;
     account: { id: string; accountOfficialName: string };
     amount: number;
@@ -44,11 +45,6 @@ export default function TransactionItem({ transaction }: Transaction) {
     day: 'numeric',
   });
 
-  const options: string[] = [
-    ...transaction.category,
-    ...Object.values(transaction.personalCategory),
-  ];
-
   const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
   };
@@ -59,9 +55,25 @@ export default function TransactionItem({ transaction }: Transaction) {
       className="grid grid-cols-[1fr_5fr_2fr_1fr] border-b border-black border-opacity-20 last:border-none"
     >
       <p className="py-4">{formattedDate}</p>
-      <div className="flex flex-col py-4">
-        <p className="">{transaction.transactionName}</p>
-        <p className="font-light">{transaction.account.accountOfficialName}</p>
+      <div className="flex items-center gap-4">
+        {transaction.merchantLogoUrl ? (
+          <img
+            src={transaction.merchantLogoUrl}
+            alt=""
+            className="h-10 w-10 rounded"
+          />
+        ) : (
+          <div className="flex h-10 w-10 items-center justify-center rounded border border-neutral-300">
+            <ArrowUpRightIcon className="w-5 text-neutral-600" />
+          </div>
+        )}
+
+        <div className="flex flex-col py-4">
+          <p className="font-medium">{transaction.transactionName}</p>
+          <p className="font-extralight">
+            {transaction.account.accountOfficialName}
+          </p>
+        </div>
       </div>
 
       <div className="group py-4">
@@ -76,7 +88,7 @@ export default function TransactionItem({ transaction }: Transaction) {
                   onChange={handleSelectionChange}
                   className="w-full bg-transparent focus:outline-none"
                 >
-                  {options.map((i) => (
+                  {transaction.category.map((i) => (
                     <option key={i} value={i} className="text-center">
                       {i}
                     </option>
