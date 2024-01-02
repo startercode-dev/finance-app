@@ -3,13 +3,13 @@
 import useInput from '@/hooks/useInput';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { UpdateMe } from '../actions';
+import { UpdateMe, UpdatePassword } from '../actions';
 
 export default function UserForm({ userData }) {
-  const router = useRouter();
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
-  const [serverErrorMessage, setServerErrorMessage] = useState('');
+  const [profileMsgs, setProfileMsgs] = useState('');
+  const [passwordMsgs, setPasswordMsgs] = useState('');
 
   const {
     value: name,
@@ -27,11 +27,17 @@ export default function UserForm({ userData }) {
   );
 
   const {
+    value: passwordCurrent,
+    hasError: passwordCurrentHasError,
+    isValid: passwordCurrentIsValid,
+    onChange: passwordCurrentOnChange,
+  } = useInput((value) => value.length > 2);
+
+  const {
     value: password,
     hasError: passwordHasError,
     isValid: passwordIsValid,
     onChange: passwordOnChange,
-    onBlur: passwordOnBlur,
   } = useInput((value) => value.length > 2);
 
   const {
@@ -42,17 +48,17 @@ export default function UserForm({ userData }) {
     onBlur: passwordConfirmOnBlur,
   } = useInput((value) => value === password);
 
-  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setServerErrorMessage('');
+    setProfileMsgs('');
     if (!nameIsValid) {
-      setServerErrorMessage('please enter a valid name');
+      setProfileMsgs('please enter a valid name');
       return;
     }
 
     if (!emailIsValid) {
-      setServerErrorMessage('please enter a valid email');
+      setProfileMsgs('please enter a valid email');
       return;
     }
 
@@ -61,19 +67,50 @@ export default function UserForm({ userData }) {
       if (res.status !== 'success') {
         throw res;
       }
-      setServerErrorMessage('updated!');
+      setProfileMsgs('updated!');
+      setTimeout(() => {
+        setProfileMsgs('');
+      }, 2000);
     } catch (error) {
       if (error.errorObj.code === 11000) {
-        setServerErrorMessage(`! user already exists`);
+        setProfileMsgs(`! user already exists`);
       } else {
-        setServerErrorMessage(error.msg);
+        setProfileMsgs(error.msg);
+      }
+    }
+  };
+
+  const handleUpdatePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setPasswordMsgs('');
+
+    if (passwordCurrentIsValid && passwordIsValid && passwordConfirmIsValid) {
+      try {
+        const res = await UpdatePassword(
+          passwordCurrent,
+          password,
+          passwordConfirm,
+        );
+
+        if (res.status !== 'success') {
+          throw res;
+        }
+
+        setPasswordMsgs('updated!');
+
+        setTimeout(() => {
+          setPasswordMsgs('');
+        }, 2000);
+      } catch (error) {
+        setPasswordMsgs(error.msg);
       }
     }
   };
 
   return (
     <div className="mb-12 flex flex-col gap-4">
-      <form className="w-2/5" onSubmit={handleUpdate}>
+      <form className="w-2/5" onSubmit={handleUpdateProfile}>
         <div className="mb-6 flex flex-col">
           <label className="">Name</label>
           <input
@@ -98,7 +135,7 @@ export default function UserForm({ userData }) {
           />
         </div>
 
-        {serverErrorMessage && <p className="my-4">{serverErrorMessage}</p>}
+        {profileMsgs && <p className="mb-4">{profileMsgs}</p>}
         <button
           disabled={name === userData.name && email === userData.email}
           type="submit"
@@ -110,11 +147,23 @@ export default function UserForm({ userData }) {
 
       <div className="mt-20 h-[1px] w-full bg-black"></div>
 
-      <form className="w-full">
+      <form className="w-full" onSubmit={handleUpdatePassword}>
         <h3 className="mb-6 font-title text-2xl">Update your password</h3>
 
-        <div className="mb-10 flex gap-14">
-          <div className="flex w-1/2 flex-col">
+        <div className="mb-10 grid grid-cols-2 gap-x-14 gap-y-7">
+          <div className="flex w-full flex-col">
+            <label>Current Password</label>
+            <input
+              className="rounded border border-black bg-white px-4 py-2 drop-shadow-card focus:outline-none"
+              type="password"
+              name="passwordCurrent"
+              placeholder="current password"
+              value={passwordCurrent}
+              onChange={passwordCurrentOnChange}
+            />
+          </div>
+
+          <div className="col-start-1 flex w-full flex-col">
             <label>New password</label>
             <input
               className="rounded border border-black bg-white px-4 py-2 drop-shadow-card focus:outline-none"
@@ -123,12 +172,10 @@ export default function UserForm({ userData }) {
               placeholder="password"
               value={password}
               onChange={passwordOnChange}
-              onBlur={passwordOnBlur}
             />
-            {passwordHasError && <p>! must be 2 or more</p>}
           </div>
 
-          <div className="flex w-1/2 flex-col">
+          <div className="flex w-full flex-col">
             <label>Confirm password</label>
             <input
               className="rounded border border-black bg-white px-4 py-2 drop-shadow-card focus:outline-none"
@@ -139,24 +186,21 @@ export default function UserForm({ userData }) {
               onChange={passwordConfirmOnChange}
               onBlur={passwordConfirmOnBlur}
             />
-            {passwordConfirmHasError && <p>! password don't match</p>}
           </div>
         </div>
 
-        {serverErrorMessage && <p>{serverErrorMessage}</p>}
+        {passwordConfirmHasError && (
+          <p className="pb-4">{`! password don't match`}</p>
+        )}
+
+        {passwordMsgs && <p className="mb-4">{passwordMsgs}</p>}
+
         <button
           type="submit"
           className="rounded border border-black bg-primary px-4 py-2 drop-shadow-card focus:outline-none"
         >
           Update Password
         </button>
-        {/* <button
-            type="button"
-            onClick={() => router.push('/')}
-            className="rounded border border-primary-dark px-4 py-2 text-primary-dark hover:bg-primary-dark hover:text-white"
-          >
-            Back
-          </button> */}
       </form>
     </div>
   );

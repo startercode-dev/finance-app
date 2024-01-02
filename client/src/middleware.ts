@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { authenticate } from './utils/authenticate';
 
 export default async function middleware(req: NextRequest) {
-    if (req.nextUrl.pathname.startsWith('/portal/:path*')) {
+    if (req.nextUrl.pathname.startsWith('/portal')) {
         const token = req.cookies.get('auth')?.value;
 
         if (token) {

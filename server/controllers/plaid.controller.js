@@ -172,8 +172,6 @@ exports.getTransactions = async (req, res, next) => {
     const existingIds = currTransactions.map((t) => t.transactionId);
     // console.log(existing_ids.length);
 
-    // console.log(req.body.endDate);
-
     //* CREATE AND ARRAY OF PROMISES FROM ALL THE ACCESS TOKENS
     const promises = accessTokens.map(async (accessToken) => {
         const request = {
