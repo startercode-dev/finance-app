@@ -11,8 +11,9 @@ module.exports = {
             },
 
             gridTemplateRows: {
-                col1: '25% 35% 40%',
-                col2: '70.3% 29.7%',
+                row1: '25% 35% 40%',
+                row2: '70.3% 29.7%',
+                col3: '15% 85%',
             },
             fontFamily: {
                 sans: ['var(--font-sans)'],

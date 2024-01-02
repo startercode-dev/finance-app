@@ -32,7 +32,7 @@ export default function AccountsSummary() {
     <div className="grid grid-cols-3 mr-12 mb-12 gap-x-12">
       {user.accounts.slice(1, 4).map((account) => {
         return (
-          <div className="card text-2xl p-5">
+          <div key={account.accountId} className="card text-2xl p-5">
             <h3>{account.accountName}</h3>
             <p className="text-secondary">${account.currentBalance}</p>
           </div>

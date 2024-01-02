@@ -25,6 +25,7 @@ interface Transaction {
 }
 
 interface Account {
+    accountId: string;
     accountName: string;
     accountOfficialName: string;
     availableBalance: number;

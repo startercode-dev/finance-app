@@ -9,7 +9,7 @@ export default function MonthlySpending() {
   const filtered = user.transactions.filter((t) => {
     const transactionDate = new Date(t.date);
     return (
-      transactionDate.getMonth() === currentMonth &&
+      transactionDate.getMonth() === currentMonth - 1 &&
       transactionDate.getFullYear() === currentYear
     );
   });

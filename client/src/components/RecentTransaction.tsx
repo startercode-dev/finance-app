@@ -154,12 +154,10 @@ export default function RecentTransaction() {
           user.transactions.length > 0 &&
           last30DaysTransactions.map((transaction) => {
             return (
-              // <Suspense fallback={<h2>loading...</h2>}>
               <TransactionItem
                 key={transaction.transactionId}
                 transaction={transaction}
               />
-              // </Suspense>
             );
           })}
       </ul>

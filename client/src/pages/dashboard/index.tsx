@@ -5,6 +5,7 @@ import Nav from '@/components/Nav';
 import 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
 import AccountsSummary from '@/components/AccountsSummary';
+import StockBar from '@/components/StockBar';
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
@@ -16,7 +17,7 @@ export default function Dashboard() {
   const filteredMonth = user.transactions.filter((t) => {
     const transactionDate = new Date(t.date);
     return (
-      transactionDate.getMonth() === currentMonth &&
+      transactionDate.getMonth() === currentMonth - 1 &&
       transactionDate.getFullYear() === currentYear
     );
   });
@@ -47,70 +48,10 @@ export default function Dashboard() {
 
   return (
     <main>
-      <div className="flex py-2 border-b border-b-dark justify-around">
-        <div className="flex gap-2 text-primary items-center font-mono">
-          <div className="fill-primary ">
-            <svg
-              width="18"
-              viewBox="0 0 15 10"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M7.5 0L14.8612 9.75H0.138784L7.5 0Z" />
-            </svg>
-          </div>
-          <p className="text-dark ">SPY</p>
-          <p>0.17%</p>
-          <p>(1290)</p>
-        </div>
-
-        <div className="flex gap-2 text-secondary items-center font-mono">
-          <div className="fill-secondary ">
-            <svg
-              width="18"
-              viewBox="0 0 15 10"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M7.5 0L14.8612 9.75H0.138784L7.5 0Z" />
-            </svg>
-          </div>
-          <p className="text-dark ">QQQ</p>
-          <p>0.17%</p>
-          <p>(1290)</p>
-        </div>
-
-        <div className="flex gap-2 text-secondary items-center font-mono">
-          <div className="fill-secondary ">
-            <svg
-              width="18"
-              viewBox="0 0 15 10"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M7.5 10L0.138785 0.249999L14.8612 0.25L7.5 10Z" />
-            </svg>
-          </div>
-          <p className="text-dark ">USD/JPY</p>
-          <p>0.17%</p>
-          <p>(1290)</p>
-        </div>
-
-        <div className="flex gap-2 text-primary items-center font-mono">
-          <div className="fill-primary ">
-            <svg
-              width="18"
-              viewBox="0 0 15 10"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M7.5 0L14.8612 9.75H0.138784L7.5 0Z" />
-            </svg>
-          </div>
-          <p className="text-dark ">US-10Y</p>
-          <p>0.17%</p>
-          <p>(1290)</p>
-        </div>
-      </div>
+      <StockBar />
       <Nav />
       <div className="w-full h-[calc(100vh-153px)] grid grid-cols-38/61">
-        <div className="grid grid-rows-col1 h-[inhert]">
+        <div className="grid grid-rows-row1 ">
           <MonthlySpending />
           <div className="card mx-12 mb-12 flex justify-center items-center">
             <div className="w-[99%] h-full">
@@ -162,7 +103,7 @@ export default function Dashboard() {
           <div className="card mx-12 mb-12"></div>
         </div>
 
-        <div className="grid grid-rows-col2 h-[inherit]">
+        <div className="grid grid-rows-row2 h-[inherit]">
           <RecentTransaction />
           <AccountsSummary />
         </div>
