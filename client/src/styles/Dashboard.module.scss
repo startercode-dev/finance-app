@@ -123,14 +123,40 @@
             text-align: right;
         }
 
+        .category {
+            gap: 1rem;
+            align-items: center;
+        }
+
         .editBtn {
             opacity: 0;
+            cursor: pointer;
+            color: #555;
         }
 
         .transaction:hover {
             .editBtn {
                 opacity: 1;
             }
+        }
+
+        select {
+            border: none;
+            background-color: transparent;
+            width: 10rem;
+            text-align: right;
+        }
+
+        .cancelBtn,
+        .submitBtn {
+            cursor: pointer;
+        }
+
+        .cancelBtn {
+            color: #b64343;
+        }
+        .submitBtn {
+            color: $primary;
         }
     }
 }

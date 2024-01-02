@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface User {
     name: string;
-    newUser: boolean;
+    accounts: Account[];
     transactions: Transaction[];
     plaidLinkToken: string;
 }
@@ -24,9 +24,17 @@ interface Transaction {
     activeCategory: string;
 }
 
+interface Account {
+    accountName: string;
+    accountOfficialName: string;
+    availableBalance: number;
+    currentBalance: number;
+    subtype: string;
+}
+
 const initialState: User = {
     name: '',
-    newUser: true,
+    accounts: [],
     transactions: [],
     plaidLinkToken: '',
 };
@@ -39,12 +47,20 @@ const userSlice = createSlice({
             state.name = action.payload;
         },
 
+        // setNewUser: (state, action) => {
+        //     state.newUser = action.payload;
+        // },
+
         setPlaidLinkToken: (state, action) => {
             state.plaidLinkToken = action.payload;
         },
 
         setTransactions: (state, action) => {
             state.transactions = action.payload;
+        },
+
+        setAccounts: (state, action) => {
+            state.accounts = action.payload;
         },
     },
 });

@@ -69,7 +69,7 @@ export default function SignupForm() {
                 }
                 //note Need to handle other errors such as server/network
 
-                router.push('/dashboard');
+                router.push('/onboarding');
             } catch (err) {
                 // console.log(err);
                 setServerErrorMessage(`${err}`);

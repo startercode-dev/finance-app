@@ -42,12 +42,17 @@ export default function LoginForm() {
 
                 const data = await res.json();
                 // console.log(data);
-
                 if (data.status === 'failed') {
                     throw data.msg;
                 }
 
-                router.push('/dashboard');
+                const itemResponse = await fetch('/api/fetch-items');
+                const items = await itemResponse.json();
+                if (items.results > 0) {
+                    router.push('/dashboard');
+                } else {
+                    router.push('/onboarding');
+                }
             } catch (err) {
                 // console.log(err);
                 setServerErrorMessage(`${err}`);

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function fetchTransactions(
+export default async function fetchAccounts(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
@@ -10,7 +10,7 @@ export default async function fetchTransactions(
 
             try {
                 const response = await fetch(
-                    `http://localhost:8000/api/v1/transaction/get-all`,
+                    `http://localhost:8000/api/v1/account/get`,
                     {
                         method: req.method,
                         headers: {

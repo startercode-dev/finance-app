@@ -31,7 +31,7 @@ export default async function signup(
                 'Set-Cookie',
                 cookie.serialize('auth', data.token, {
                     httpOnly: true,
-                    maxAge: 60 * 60 * process.env.JWT_COOKIE_EXP, // in seconds
+                    maxAge: process.env.JWT_COOKIE_EXP * 60 * 60, // in seconds
                     secure:
                         process.env.NODE_ENV !== 'development' ||
                         req.headers['x-forwarded-proto'] === 'https',

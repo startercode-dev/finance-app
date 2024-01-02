@@ -13,6 +13,8 @@ const authRouter = require('./routes/auth.routes');
 const userRouter = require('./routes/user.routes');
 const plaidRouter = require('./routes/plaid.routes');
 const transactionRouter = require('./routes/transaction.routes');
+const accountRouter = require('./routes/account.routes');
+const itemRouter = require('./routes/item.routes');
 const globalErrorController = require('./utils/error-handler');
 const AppError = require('./utils/app-error');
 
@@ -75,7 +77,9 @@ app.use(compression());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/plaid', plaidRouter);
+app.use('/api/v1/account', accountRouter);
 app.use('/api/v1/transaction', transactionRouter);
+app.use('/api/v1/item', itemRouter);
 
 // GLOBAL ERR HANDLER **
 app.all('*', (req, res, next) => {

@@ -31,6 +31,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                         permanent: false,
                     },
                 };
+            } else {
+                return {
+                    redirect: {
+                        destination: '/',
+                        permanent: false,
+                    },
+                };
             }
         }
     } catch (error) {

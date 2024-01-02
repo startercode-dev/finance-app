@@ -16,7 +16,23 @@ export const getUserData = () => {
 
             // dispatch(userActions.setUser(data.name));
         } catch (err) {
-            console.log(err);
+            throw err;
+        }
+    };
+};
+
+export const getAccountsData = () => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            const response = await fetch('/api/fetch-accounts');
+            if (!response.ok) {
+                throw 'failed to fetch accounts';
+            }
+            const data = await response.json();
+            // console.log(data);
+            dispatch(userActions.setAccounts(data.accounts));
+        } catch (error) {
+            throw error;
         }
     };
 };
@@ -32,10 +48,11 @@ export const getTransactionsData = () => {
 
             const data = await response.json();
             const transactions = data.transactions;
-
-            dispatch(userActions.setTransactions(transactions));
+            if (transactions.length !== 0) {
+                dispatch(userActions.setTransactions(transactions));
+            }
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     };
 };

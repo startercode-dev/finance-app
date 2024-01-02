@@ -27,13 +27,12 @@ export default async function updateTransaction(
                 const data = await response.json();
 
                 if (data.status === 'error') {
-                    throw 'invalid token';
+                    throw data;
                 }
-                // console.log(data);
 
                 res.status(200).json(data);
             } catch (err) {
-                // console.log(err);
+                console.log(err);
                 res.status(500).json(err);
             }
         }

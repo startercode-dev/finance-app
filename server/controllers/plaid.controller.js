@@ -37,7 +37,7 @@ exports.getLinkToken = async (req, res, next) => {
         //note: Adjust the catchAsync error handling for plaid APIs
     } catch (error) {
         console.log(error);
-        res.status(400).json(error);
+        res.status(404).json(error);
     }
 };
 
@@ -56,10 +56,14 @@ exports.getAccessToken = async (req, res, next) => {
         });
 
         res.status(200).json({
+            status: 'success',
             newItem,
         });
     } catch (error) {
-        console.log(error);
+        res.status(404).json({
+            status: 'error',
+            error,
+        });
     }
 };
 
@@ -99,13 +103,14 @@ exports.getAccounts = async (req, res, next) => {
             message: 'new account added',
         });
     } catch (error) {
-        console.log(error);
+        res.status(404).json(error);
     }
 };
 
 exports.getTransactions = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
     const accessTokens = items.map((item) => item.accessToken);
+    // console.log(accessTokens);
 
     const currTransactions = await Transaction.find({ user: req.user._id });
     const existingIds = currTransactions.map((t) => t.transactionId);
@@ -148,7 +153,6 @@ exports.getTransactions = async (req, res, next) => {
                 const account = await Account.findOne({
                     accountId: transaction.account_id,
                 });
-                // console.log(account);
                 if (existingIds.indexOf(transaction.transaction_id) === -1) {
                     await Transaction.create({
                         user: req.user,
@@ -175,6 +179,6 @@ exports.getTransactions = async (req, res, next) => {
         });
     } catch (err) {
         // handle error
-        console.log(err);
+        res.status(404).json(err);
     }
 };

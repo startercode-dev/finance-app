@@ -14,7 +14,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
 });
 
 exports.updateTransaction = catchAsync(async (req, res, next) => {
-    const transaction = await Transaction.findOneAndUpdate(
+    await Transaction.findOneAndUpdate(
         { transactionId: req.params.id },
         req.body,
         {
