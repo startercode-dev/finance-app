@@ -67,8 +67,88 @@ export default function MainDashboard() {
                     <div className={styles.column2}>
                         <div className={styles.budget}></div>
                         <div className={styles.transactions}>
-                            <h3>Recent Transactions</h3>
-                            {/* //! make the tractions divy */}
+                            <h3>Activities</h3>
+                            <div className={styles.container}>
+                                <div className={`flex ${styles.transaction}`}>
+                                    <p>01/07/23</p>
+                                    <div className={`flex ${styles.info}`}>
+                                        <div className={styles.col2}>
+                                            <p>NORTHSTAR@TAHOE LIFT TCKT</p>
+                                            <p className={styles.account}>
+                                                Chase 1.5% Unlimited
+                                            </p>
+                                        </div>
+                                        <div className={styles.col3}>
+                                            <p>$170.00</p>
+                                            <p>..category</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={`flex ${styles.transaction}`}>
+                                    <p>01/07/23</p>
+                                    <div className={`flex ${styles.info}`}>
+                                        <div className={styles.col2}>
+                                            <p>Chick-fil-a</p>
+                                            <p className={styles.account}>
+                                                USBank Altitude Go
+                                            </p>
+                                        </div>
+                                        <div className={styles.col3}>
+                                            <p>$10.00</p>
+                                            <p>Food</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={`flex ${styles.transaction}`}>
+                                    <p>01/07/23</p>
+                                    <div className={`flex ${styles.info}`}>
+                                        <div className={styles.col2}>
+                                            <p>Aerotek Payroll</p>
+                                            <p className={styles.account}>
+                                                Chase Checking
+                                            </p>
+                                        </div>
+                                        <div className={styles.col3}>
+                                            <p>+$8208.90</p>
+                                            <p>Income</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={`flex ${styles.transaction}`}>
+                                    <p>01/07/23</p>
+                                    <div className={`flex ${styles.info}`}>
+                                        <div className={styles.col2}>
+                                            <p>Chick-fil-a</p>
+                                            <p className={styles.account}>
+                                                USBank Altitude Go
+                                            </p>
+                                        </div>
+                                        <div className={styles.col3}>
+                                            <p>$10.00</p>
+                                            <p>Food</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={`flex ${styles.transaction}`}>
+                                    <p>01/07/23</p>
+                                    <div className={`flex ${styles.info}`}>
+                                        <div className={styles.col2}>
+                                            <p>Chick-fil-a</p>
+                                            <p className={styles.account}>
+                                                USBank Altitude Go
+                                            </p>
+                                        </div>
+                                        <div className={styles.col3}>
+                                            <p>$10.00</p>
+                                            <p>Food</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
