@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/store/hooks';
-import { getTransactionsData } from '@/store/userActions';
+import { fetchTransactionsData } from '@/store/userActions';
 import { useState } from 'react';
 import { CheckCircle, NotePencil, XCircle } from '@phosphor-icons/react';
 import { useRouter } from 'next/router';
@@ -55,7 +55,7 @@ export default function TransactionItem({ transaction }) {
         router.reload();
       }
 
-      await dispatch(getTransactionsData());
+      await dispatch(fetchTransactionsData());
       setEditMode(false);
     } else {
       console.log('didnt change');

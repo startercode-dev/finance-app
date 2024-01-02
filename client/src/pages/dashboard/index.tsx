@@ -1,16 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import {
-  getAccountsData,
-  getTransactionsData,
-  getUserData,
-} from '@/store/userActions';
-import { useEffect } from 'react';
 import RecentTransaction from '@/components/RecentTransaction';
 import MonthlySpending from '@/components/MonthlySpending';
 import Nav from '@/components/Nav';
 import 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
@@ -50,21 +43,6 @@ export default function Dashboard() {
 
   const sums = sumCategories.map((i) => i.totalAmount);
   // console.log(sums);
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        dispatch(getUserData());
-        dispatch(getTransactionsData());
-        // dispatch(getAccountsData());
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    init();
-    return () => {};
-  }, []);
 
   return (
     <main>

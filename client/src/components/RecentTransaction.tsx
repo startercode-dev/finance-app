@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import TransactionItem from './TransactionItem';
-import { getTransactionsData } from '@/store/userActions';
+import { fetchTransactionsData } from '@/store/userActions';
 import { ArrowsClockwise } from '@phosphor-icons/react';
+import { useEffect, useState } from 'react';
 
 export default function RecentTransaction() {
   const dispatch = useAppDispatch();
@@ -9,6 +10,7 @@ export default function RecentTransaction() {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
+  const [loading, setLoading] = useState(true);
 
   const filtered = user.transactions.filter((t) => {
     const transactionDate = new Date(t.date);
@@ -50,8 +52,9 @@ export default function RecentTransaction() {
   };
 
   const getTransactions1m = async () => {
+    setLoading(true);
     const startDate = formatDate(getStartDate1m());
-    console.log(startDate, endDate);
+    // console.log(startDate, endDate);
 
     const body = {
       endDate,
@@ -64,15 +67,17 @@ export default function RecentTransaction() {
         body: JSON.stringify(body),
       });
 
-      dispatch(getTransactionsData());
+      await dispatch(fetchTransactionsData());
 
       // console.log('success');
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   const getTransactions24m = async () => {
+    setLoading(true);
     const startDate = formatDate(getStartDate24m());
     // console.log(startDate, endDate);
 
@@ -86,18 +91,38 @@ export default function RecentTransaction() {
         body: JSON.stringify(body),
       });
 
-      dispatch(getTransactionsData());
-
+      await dispatch(fetchTransactionsData());
       // console.log('success');
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        setLoading(true);
+        await dispatch(fetchTransactionsData());
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (user.transactions.length === 0) {
+      init();
+    }
+    setLoading(false);
+    return () => {};
+  }, []);
 
   return (
     <div className="card mr-12 mb-12 flex flex-col text-2xl p-8">
       <div className="flex mb-6 items-center gap-6">
-        {user.transactions && user.transactions.length > 0 ? (
+        {loading ? (
+          <h2>loading</h2>
+        ) : user.transactions && user.transactions.length > 0 ? (
           <>
             <h3 className="font-medium">Recent Activities</h3>
             <ArrowsClockwise
@@ -115,28 +140,30 @@ export default function RecentTransaction() {
               Let&#39;s get started by syncing up all your transactions from
               past 24 months.
             </p>
+            <button
+              onClick={getTransactions24m}
+              className="mt-5 border border-primary bg-primary text-lg text-white rounded-md px-8 py-2 hover:text-primary hover:bg-white transition-all"
+            >
+              Sync transactions !
+            </button>
           </div>
         )}
       </div>
 
       <ul className="overflow-y-auto">
-        {user.transactions && user.transactions.length > 0 ? (
+        {!loading &&
+          user.transactions &&
+          user.transactions.length > 0 &&
           last15DaysTransactions.map((transaction) => {
             return (
+              // <Suspense fallback={<h2>loading...</h2>}>
               <TransactionItem
                 key={transaction.transactionId}
                 transaction={transaction}
               />
+              // </Suspense>
             );
-          })
-        ) : (
-          <button
-            onClick={getTransactions24m}
-            className="border border-primary bg-primary text-lg text-white rounded-md px-8 py-2 hover:text-primary hover:bg-white transition-all"
-          >
-            Sync transactions !
-          </button>
-        )}
+          })}
       </ul>
     </div>
   );

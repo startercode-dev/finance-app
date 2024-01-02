@@ -5,7 +5,9 @@ import InvestmentsIcon from '../../public/investments.svg';
 import { usePathname } from 'next/navigation';
 import { MuseoModerno } from 'next/font/google';
 import { useRouter } from 'next/router';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useEffect } from 'react';
+import { fetchUserData } from '@/store/userActions';
 
 const Logo = MuseoModerno({ subsets: ['latin'] });
 
@@ -13,12 +15,28 @@ export default function Nav() {
   const currentRoute = usePathname();
   const router = useRouter();
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
     await fetch('/api/logout');
     await router.push('/');
     router.reload();
   };
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await dispatch(fetchUserData());
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (!user.name) {
+      init();
+    }
+    return () => {};
+  }, []);
 
   return (
     <nav className="flex w-full py-8 px-12">

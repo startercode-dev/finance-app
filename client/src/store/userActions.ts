@@ -1,7 +1,7 @@
 import { AppDispatch } from '.';
 import { userActions } from './userSlice';
 
-export const getUserData = () => {
+export const fetchUserData = () => {
     return async (dispatch: AppDispatch) => {
         try {
             const response = await fetch('/api/user');
@@ -21,7 +21,7 @@ export const getUserData = () => {
     };
 };
 
-export const getAccountsData = () => {
+export const fetchAccountsData = () => {
     return async (dispatch: AppDispatch) => {
         try {
             const response = await fetch('/api/fetch-accounts');
@@ -37,7 +37,7 @@ export const getAccountsData = () => {
     };
 };
 
-export const getTransactionsData = () => {
+export const fetchTransactionsData = () => {
     return async (dispatch: AppDispatch) => {
         try {
             const response = await fetch('/api/fetch-transactions');
