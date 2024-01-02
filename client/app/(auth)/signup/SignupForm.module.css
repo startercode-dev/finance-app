@@ -1,0 +1,41 @@
+.form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 20rem;
+}
+
+.inputs input {
+    font-family: inherit;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--dark);
+}
+
+.inputs input:focus {
+    outline: none;
+    border-color: var(--foreground);
+    background-color: var(--background);
+}
+
+.invalid input {
+    border: 1px solid #b40e0e;
+    background-color: #fddddd;
+}
+
+.inputs button {
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--foreground);
+    background: var(--background);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--foreground);
+    border-radius: 0.25rem;
+}
