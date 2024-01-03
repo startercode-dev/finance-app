@@ -22,7 +22,7 @@ async function fetchTransactions(page: number, limit: number) {
 
 export default async function TransactionsPage({ searchParams }) {
   const page = searchParams['page'] ?? '1';
-  const limit = searchParams['limit'] ?? '25';
+  const limit = searchParams['limit'] ?? '20';
 
   const { currentPage, currentLimit, transactions, totalTransactions } =
     await fetchTransactions(page, limit);
@@ -40,7 +40,7 @@ export default async function TransactionsPage({ searchParams }) {
         </div>
 
         <div className="h-full w-full rounded-md border border-black bg-white drop-shadow-card">
-          <div className="flex h-[inherit] flex-col p-5">
+          <div className="sm-h:h-[950px] flex h-[560px] flex-col p-5">
             <div className="grid grid-cols-[1fr_5fr_2fr_1fr] border-b border-gray-500 pb-2">
               <h3 className="font-semibold">Date</h3>
               <h3 className="font-semibold">Name</h3>

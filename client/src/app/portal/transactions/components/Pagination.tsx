@@ -8,11 +8,10 @@ export default function Pagination({ data }) {
   const searchParams = useSearchParams();
 
   const page = searchParams.get('page') ?? '1';
-  const limit = searchParams.get('limit') ?? '25';
+  const limit = searchParams.get('limit') ?? '20';
 
   const totalPage = Math.ceil(data.totalTransactions / data.currentLimit);
-  // console.log(totalPage);
-  // console.log(data.currentPage === totalPage - 2);
+
   const staticButtons = () => {
     const buttons = [];
 
@@ -25,8 +24,8 @@ export default function Pagination({ data }) {
               `/portal/transactions?page=${Number(i)}&limit=${limit}`,
             );
           }}
-          className={clsx('h-10 w-10', {
-            'rounded border border-black bg-white drop-shadow-card':
+          className={clsx('h-10 w-10 hover:text-primary', {
+            'rounded border border-black bg-white drop-shadow-card hover:text-primary':
               data.currentPage === i,
           })}
         >
@@ -47,9 +46,9 @@ export default function Pagination({ data }) {
           );
         }}
         className={clsx(
-          'h-10 w-24 rounded border border-black bg-background opacity-100 drop-shadow-card',
+          'h-10 w-24 rounded border border-black bg-background opacity-100 drop-shadow-card hover:bg-white hover:text-primary',
           {
-            '!opacity-30': data.currentPage < 2,
+            '!opacity-30 hover:!text-black': data.currentPage < 2,
           },
         )}
         disabled={data.currentPage < 2}
@@ -65,7 +64,7 @@ export default function Pagination({ data }) {
                 `/portal/transactions?page=${Number(1)}&limit=${limit}`,
               );
             }}
-            className={clsx('h-10 w-10', {
+            className={clsx('h-10 w-10 hover:text-primary', {
               'rounded border border-black bg-white drop-shadow-card':
                 data.currentPage === 1,
             })}
@@ -81,7 +80,7 @@ export default function Pagination({ data }) {
                     `/portal/transactions?page=${Number(2)}&limit=${limit}`,
                   );
                 }}
-                className={clsx('h-10 w-10', {
+                className={clsx('h-10 w-10 hover:text-primary', {
                   'rounded border border-black bg-white drop-shadow-card':
                     data.currentPage === 2,
                 })}
@@ -95,7 +94,7 @@ export default function Pagination({ data }) {
                     `/portal/transactions?page=${Number(3)}&limit=${limit}`,
                   );
                 }}
-                className={clsx('h-10 w-10', {
+                className={clsx('h-10 w-10 hover:text-primary', {
                   'rounded border border-black bg-white drop-shadow-card':
                     data.currentPage === 3,
                 })}
@@ -109,7 +108,7 @@ export default function Pagination({ data }) {
                     `/portal/transactions?page=${Number(4)}&limit=${limit}`,
                   );
                 }}
-                className={clsx('h-10 w-10', {
+                className={clsx('h-10 w-10 hover:text-primary', {
                   'rounded border border-black bg-white drop-shadow-card':
                     data.currentPage === 4,
                 })}
@@ -131,12 +130,12 @@ export default function Pagination({ data }) {
                     }&limit=${limit}`,
                   );
                 }}
-                className={'h-10 w-10'}
+                className={'h-10 w-10 hover:text-primary'}
               >
                 {data.currentPage - 1}
               </button>
 
-              <button className="h-10 w-10 rounded border border-black bg-white  drop-shadow-card">
+              <button className="h-10 w-10 rounded border border-black bg-white drop-shadow-card hover:text-primary">
                 {data.currentPage}
               </button>
 
@@ -148,7 +147,7 @@ export default function Pagination({ data }) {
                     }&limit=${limit}`,
                   );
                 }}
-                className="h-10 w-10"
+                className="h-10 w-10 hover:text-primary"
               >
                 {data.currentPage + 1}
               </button>
@@ -165,7 +164,7 @@ export default function Pagination({ data }) {
                     `/portal/transactions?page=${totalPage - 3}&limit=${limit}`,
                   );
                 }}
-                className={clsx('h-10 w-10', {
+                className={clsx('h-10 w-10 hover:text-primary', {
                   'rounded border border-black bg-white drop-shadow-card':
                     data.currentPage === totalPage - 3,
                 })}
@@ -179,7 +178,7 @@ export default function Pagination({ data }) {
                     `/portal/transactions?page=${totalPage - 2}&limit=${limit}`,
                   );
                 }}
-                className={clsx('h-10 w-10', {
+                className={clsx('h-10 w-10 hover:text-primary', {
                   'rounded border border-black bg-white drop-shadow-card':
                     data.currentPage === totalPage - 2,
                 })}
@@ -192,7 +191,7 @@ export default function Pagination({ data }) {
                     `/portal/transactions?page=${totalPage - 1}&limit=${limit}`,
                   );
                 }}
-                className={clsx('h-10 w-10', {
+                className={clsx('h-10 w-10 hover:text-primary', {
                   'rounded border border-black bg-white drop-shadow-card':
                     data.currentPage === totalPage - 1,
                 })}
@@ -208,7 +207,7 @@ export default function Pagination({ data }) {
                 `/portal/transactions?page=${totalPage}&limit=${limit}`,
               );
             }}
-            className={clsx('h-10 w-10', {
+            className={clsx('h-10 w-10 hover:text-primary', {
               'rounded border border-black bg-white drop-shadow-card':
                 data.currentPage === totalPage,
             })}
@@ -227,9 +226,9 @@ export default function Pagination({ data }) {
           );
         }}
         className={clsx(
-          'h-10 w-24 rounded border border-black bg-background opacity-100 drop-shadow-card',
+          'h-10 w-24 rounded border border-black bg-background opacity-100 drop-shadow-card hover:bg-white hover:text-primary',
           {
-            '!opacity-30': data.currentPage >= totalPage,
+            '!opacity-30 hover:!text-black': data.currentPage >= totalPage,
           },
         )}
         disabled={data.currentPage >= totalPage}

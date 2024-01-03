@@ -23,6 +23,9 @@ const config: Config = {
             dropShadow: {
                 card: '6px 6px 0px #1A1A23',
             },
+            screens: {
+                'sm-h': { raw: '(min-height: 1000px)' },
+            },
         },
     },
     plugins: [],
