@@ -2,13 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-    }
-}
-
-body {
-}
+/* @layer utilities { */
+/*     .pause { */
+/*         animation-play-state: paused; */
+/*     } */
+/* } */

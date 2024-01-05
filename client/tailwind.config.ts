@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 const config: Config = {
     content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
@@ -23,8 +24,18 @@ const config: Config = {
             dropShadow: {
                 card: '6px 6px 0px #1A1A23',
             },
+            animation: {
+                scroll: 'scroll 30s linear infinite',
+            },
+            keyframes: {
+                scroll: {
+                    '0%': { transform: 'translateX(0)' },
+                    '100%': { transform: 'translateX(calc(-100% - 1rem))' },
+                },
+            },
             screens: {
-                'sm-h': { raw: '(min-height: 1000px)' },
+                tall: { raw: '(min-height: 1000px)' },
+                mobile: { max: '767px' },
             },
         },
     },
