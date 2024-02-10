@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { authenticate } from './utils/authenticate';
 
 export default async function middleware(req: NextRequest) {
-    if (req.nextUrl.pathname.startsWith('/portal')) {
+    if (req.nextUrl.pathname.startsWith('/dashboard')) {
         const token = req.cookies.get('auth')?.value;
 
         if (token) {
@@ -42,9 +42,7 @@ export default async function middleware(req: NextRequest) {
         if (token) {
             try {
                 await authenticate(token);
-                return NextResponse.redirect(
-                    new URL('/portal/dashboard', req.url),
-                );
+                return NextResponse.redirect(new URL('/dashboard', req.url));
             } catch (err) {
                 return NextResponse.next();
             }
@@ -59,9 +57,7 @@ export default async function middleware(req: NextRequest) {
         if (token) {
             try {
                 await authenticate(token);
-                return NextResponse.redirect(
-                    new URL('/portal/dashboard', req.url),
-                );
+                return NextResponse.redirect(new URL('/dashboard', req.url));
             } catch (err) {
                 return NextResponse.next();
             }
@@ -88,10 +84,9 @@ export default async function middleware(req: NextRequest) {
                 );
 
                 const { items } = await response.json();
-
                 if (items.length > 0) {
                     return NextResponse.redirect(
-                        new URL('/portal/dashboard', req.url),
+                        new URL('/dashboard', req.url),
                     );
                 }
 

@@ -36,6 +36,3 @@ yarn-error.log*
 next-env.d.ts
 env.d.ts
 .vscode
-
-# other md files
-TODO.md

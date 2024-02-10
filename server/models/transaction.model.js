@@ -18,11 +18,6 @@ const transactionSchema = new mongoose.Schema(
             trim: true,
         },
 
-        merchantLogoUrl: {
-            type: String,
-            trim: true,
-        },
-
         transactionName: {
             type: String,
             trim: true,
@@ -43,13 +38,8 @@ const transactionSchema = new mongoose.Schema(
             trim: true,
         },
 
-        plaidCategory: {
+        personalCategory: {
             type: {},
-            trim: true,
-        },
-
-        plaidCategoryIconUrl: {
-            type: String,
             trim: true,
         },
 
@@ -78,7 +68,7 @@ const transactionSchema = new mongoose.Schema(
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    },
+    }
 );
 
 transactionSchema.pre(/^find/, function (next) {

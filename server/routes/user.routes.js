@@ -8,6 +8,6 @@ const router = express.Router();
 router.use(authController.protect);
 router.get('/info', userController.getMe);
 router.patch('/update-me', userController.updateMe);
-router.patch('/update-my-password', authController.updateMyPassword);
+router.patch('/update-my-password', userController.updateMyPassword);
 
 module.exports = router;

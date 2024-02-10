@@ -8,7 +8,7 @@ router.use(authController.protect);
 router.post('/item/create_link_token', plaidController.getLinkToken);
 router.post('/item/get_access_token', plaidController.getAccessToken);
 
-router.post('/accounts/get', plaidController.getAccounts);
+router.get('/accounts/get', plaidController.getAccounts);
 router.post('/transactions/get', plaidController.getTransactions);
 
 router.post('/fire_webhook', plaidController.fireWebhook);

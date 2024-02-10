@@ -1,6 +1,6 @@
 const express = require('express');
-const authController = require('../controllers/auth.controller');
-const adminController = require('../controllers/admin.controller');
+const authController = require('../api/controllers/auth-controller');
+const adminController = require('../api/controllers/admin-controller');
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router
     .get(
         authController.protect,
         authController.restrictTo('admin'),
-        adminController.getAllUser,
+        adminController.getAllUser
     );
 // router.route('/:id').get(authController.protect, adminController.getUser);
 

@@ -5,8 +5,7 @@ const transactionController = require('../controllers/transaction.controller');
 const router = express.Router();
 
 router.use(authController.protect);
-router.post('/get', transactionController.fetchTransactions);
+router.get('/get-all', transactionController.getAll);
 router.patch('/:id', transactionController.updateTransaction);
-router.get('/fetchDashboard', transactionController.fetchDashboard);
 
 module.exports = router;

@@ -2,15 +2,6 @@ const catchAsync = require('../utils/catch-async');
 const AppError = require('../utils/app-error');
 const User = require('../models/user.model');
 
-// HELPER FUNCTIONS
-const filterObj = (obj, ...allowedFields) => {
-    const newObj = {};
-    Object.keys(obj).forEach((el) => {
-        if (allowedFields.includes(el)) newObj[el] = obj[el];
-    });
-    return newObj;
-};
-
 exports.getAllUser = catchAsync(async (req, res, next) => {
     const data = await User.find();
 
@@ -34,10 +25,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     // create error for password change
     if (req.body.password || req.body.passwordConfirm) {
         return next(
-            new AppError(
-                'not for password updates, use /updateMyPassword',
-                400,
-            ),
+            new AppError('not for password updates, use /updateMyPassword', 400)
         );
     }
 
@@ -57,3 +45,29 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         },
     });
 });
+
+exports.updateMyPassword = catchAsync(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('+password');
+
+    // check current password
+    if (
+        !(await user.correctPassword(req.body.passwordCurrent, user.password))
+    ) {
+        return next(new AppError('current password is wrong', 401));
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+
+    createSendToken(user, 200, req, res);
+});
+
+// HELPER FUNCTIONS
+const filterObj = (obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(obj).forEach((el) => {
+        if (allowedFields.includes(el)) newObj[el] = obj[el];
+    });
+    return newObj;
+};

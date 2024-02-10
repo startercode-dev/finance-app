@@ -1,8 +1,13 @@
-const { PlaidApi, Configuration, PlaidEnvironments } = require('plaid');
 const Item = require('../models/item.model');
 const Account = require('../models/account.model');
 const Transaction = require('../models/transaction.model');
-const { toTitleCase, removePrefix } = require('../utils/helpers');
+const {
+    PlaidApi,
+    Configuration,
+    PlaidEnvironments,
+    WebhookType,
+    SandboxItemFireWebhookRequestWebhookCodeEnum,
+} = require('plaid');
 
 const configuration = new Configuration({
     basePath: PlaidEnvironments[process.env.PLAID_ENV],
@@ -16,7 +21,7 @@ const configuration = new Configuration({
 });
 const client = new PlaidApi(configuration);
 
-const webhookUrl =
+let webhookUrl =
     process.env.WEBHOOK_URL || 'https://www.example.com/server/plaid_webhook';
 
 // console.log(webhookUrl);
@@ -25,12 +30,14 @@ exports.fireWebhook = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
     const accessTokens = items[0].accessToken;
 
+    // console.log(accessTokens);
+
     try {
         const fireWebhookRes = await client.sandboxItemFireWebhook({
             access_token: accessTokens,
             webhook_code: 'DEFAULT_UPDATE',
         });
-        // console.log(fireWebhookRes);
+        console.log(fireWebhookRes.data);
         res.status(200).json(fireWebhookRes.data);
     } catch (error) {
         console.log(error);
@@ -126,7 +133,7 @@ exports.getAccounts = async (req, res, next) => {
 
     try {
         const response = await client.accountsGet(request);
-        const { accounts } = response.data;
+        const accounts = response.data.accounts;
 
         await Promise.all(
             accounts.map(async (account) => {
@@ -142,7 +149,7 @@ exports.getAccounts = async (req, res, next) => {
                         subtype: account.subtype,
                     });
                 }
-            }),
+            })
         );
 
         res.status(201).json({
@@ -158,9 +165,13 @@ exports.getAccounts = async (req, res, next) => {
 exports.getTransactions = async (req, res, next) => {
     const items = await Item.find({ user: req.user._id });
     const accessTokens = items.map((item) => item.accessToken);
+    // console.log(accessTokens);
 
     const currTransactions = await Transaction.find({ user: req.user._id });
     const existingIds = currTransactions.map((t) => t.transactionId);
+    // console.log(existing_ids.length);
+
+    // console.log(req.body.endDate);
 
     //* CREATE AND ARRAY OF PROMISES FROM ALL THE ACCESS TOKENS
     const promises = accessTokens.map(async (accessToken) => {
@@ -175,7 +186,7 @@ exports.getTransactions = async (req, res, next) => {
         try {
             const response = await client.transactionsGet(request);
             let transaction = response.data.transactions;
-            const { total_transactions } = response.data;
+            const total_transactions = response.data.total_transactions;
             // console.log(transactions.length);
 
             // PAGINATED REQUEST TO GET ALL AVAILABLE TRANSACTIONS
@@ -189,10 +200,11 @@ exports.getTransactions = async (req, res, next) => {
                         include_personal_finance_category: true,
                     },
                 };
-                const paginatedResponse =
-                    await client.transactionsGet(paginatedRequest);
+                const paginatedResponse = await client.transactionsGet(
+                    paginatedRequest
+                );
                 transaction = transaction.concat(
-                    paginatedResponse.data.transactions,
+                    paginatedResponse.data.transactions
                 );
                 // console.log(transactions.length);
             }
@@ -215,22 +227,6 @@ exports.getTransactions = async (req, res, next) => {
                 const account = await Account.findOne({
                     accountId: transaction.account_id,
                 });
-
-                // format and combine Plaid Categories
-                const { category } = transaction;
-                const { primary } = transaction.personal_finance_category;
-                const { detailed } = transaction.personal_finance_category;
-
-                const formattedPrimary = toTitleCase(
-                    primary.split('_').join(' '),
-                );
-                const formattedDetail = toTitleCase(
-                    removePrefix(detailed, primary),
-                );
-                const plaidCategories = Array.from(
-                    new Set([...category, formattedPrimary, formattedDetail]),
-                );
-
                 // Check if transaction already exist
                 if (existingIds.indexOf(transaction.transaction_id) === -1) {
                     await Transaction.create({
@@ -239,18 +235,17 @@ exports.getTransactions = async (req, res, next) => {
                         date: transaction.date,
                         authorizedDate: transaction.authorized_date,
                         merchantName: transaction.merchant_name,
-                        merchantLogoUrl: transaction.logo_url,
                         transactionName: transaction.name,
                         amount: transaction.amount,
-                        activeCategory: formattedPrimary,
-                        category: plaidCategories,
-                        plaidCategoryIconUrl:
-                            transaction.personal_finance_category_icon_url,
+                        activeCategory:
+                            transaction.personal_finance_category.primary,
+                        category: transaction.category,
+                        personalCategory: transaction.personal_finance_category,
                         transactionId: transaction.transaction_id,
                         pending: transaction.pending,
                     });
                 }
-            }),
+            })
         );
 
         res.status(201).json({

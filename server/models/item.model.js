@@ -26,7 +26,7 @@ const itemSchema = new mongoose.Schema(
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    },
+    }
 );
 
 const Item = mongoose.model('items', itemSchema);
